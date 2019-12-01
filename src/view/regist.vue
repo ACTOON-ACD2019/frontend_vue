@@ -48,6 +48,7 @@ export default {
   },
   methods: {
     regist() {
+      console.log("회원가입 시작")
       var instance = this.$http.create();
       instance.defaults.headers.common = {};
       instance.post("https://beta.actoon.sokdak.me/api/auth/register/", {
@@ -55,6 +56,7 @@ export default {
           password: this.reg_pass
         })
         .then(response => {
+          console.log("회원가입 성공")
           alert("정상적으로 회원가입 되었습니다.");
           this.$router.push({ path: "/login" });
         })
@@ -65,6 +67,7 @@ export default {
             else {
               alert("잘못된 접근입니다.")
             }
+            console.log("회원가입 실패");
         });
     }
   }

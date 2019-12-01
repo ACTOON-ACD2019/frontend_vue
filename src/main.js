@@ -2,20 +2,22 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import axios from 'axios'
-import VeeValidate from 'vee-validate'
 import VModal from 'vue-js-modal'
-
+import VueClip from 'vue-clip'
+ 
 import App from './App'
 import router from './router'
 
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import vueFabricWrapper from "vue-fabric-wrapper";
 
+Vue.use(vueFabricWrapper)
+Vue.use(VueClip)
 Vue.use(BootstrapVue)
 Vue.use(VModal);
 Vue.use(require('vue-moment'));
-Vue.use(VeeValidate);
 
 Vue.prototype.$EventBus = new Vue();
 axios.defaults.headers.common['Authorization'] = localStorage.getItem('auth');

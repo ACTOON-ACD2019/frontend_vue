@@ -15,7 +15,7 @@ export default {
     };
   },
   created() {
-    this.$EventBus.$on("loadProject", () => {
+    this.$EventBus.$on("loadtask", () => {
       this.getTaskList();
     });
   },

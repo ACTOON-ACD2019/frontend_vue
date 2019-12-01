@@ -47,6 +47,7 @@ export default {
   },
   methods: {
     login() {
+      console.log("로그인 시작");
       var instance = this.$http.create();
       instance.defaults.headers.common = {};
       instance.post("https://beta.actoon.sokdak.me/api/auth/", {
@@ -61,12 +62,14 @@ export default {
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("auth", "Token " + response.data.token)
           alert("로그인 되었습니다.");
+          console.log("로그인 성공");
           this.$router.push({ path: "/root" });
           history.go(0)
         })
         .catch(error => {
             if (error.response.status == 400){
-                alert("아이디 혹은 비밀번호가 잘못되었습니다.");
+              console.log("로그인 실패")
+              alert("아이디 혹은 비밀번호가 잘못되었습니다.");
             }
         });
     }

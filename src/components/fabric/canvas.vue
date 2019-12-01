@@ -1,8 +1,8 @@
 <template>
   <div class="fabric">
     <fabric-canvas>
-      <fabric-circle :id="2" :scaleX="2" :scaleY="2"></fabric-circle>
-      <fab-file :url="'./img/1.jpg'" :id="4"></fab-file>
+      <fabric-circle :id="2"></fabric-circle>
+      <fabric-image-from-url :id="'someUUID'"></fabric-image-from-url>
     </fabric-canvas>
   </div>
 </template>
@@ -11,17 +11,20 @@
 import vueFabricWrapper from "vue-fabric-wrapper";
 
 export default {
+  name: "fabric",
   data(){
     return {
       url:"./img/1.jpg"
     }
   },
   components: {
-    FabFile: vueFabricWrapper.FabricImageFromURL
+    FabricCanvas: vueFabricWrapper.FabricCanvas,
+    FabricCircle: vueFabricWrapper.FabricCircle,
+    FabricImageFromUrl: vueFabricWrapper.FabricImageFromUrl
   },
-  methods: {
-    print() {
-      console.log("움직임 감지");
+  methods:{
+    print(){
+      console.log("움직임 감지")
     }
   }
 };

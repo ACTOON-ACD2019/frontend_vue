@@ -5,15 +5,12 @@
         <b-button squared size="lg" @click="showNewModal">새 프로젝트</b-button>
       </div>
       <div class="m1">
-        <b-button squared size="lg" @click="showLoadModal">프로젝트 불러오기</b-button>
+        <b-button squared size="lg" @click="showLoadModalOpen">프로젝트 불러오기</b-button>
       </div>
     </div>
     <div v-else-if="kind_menu==2">
       <div class="m2">
         <b-button squared size="lg" @click="showUploadModal">이미지 추가</b-button>
-      </div>
-      <div class="m2">
-        <b-button squared size="lg" @click="()=>{this.$EventBus.$emit('image');}">이미지 편집</b-button>
       </div>
       <div class="m2">
         <b-button squared size="lg" @click="()=>{this.$EventBus.$emit('movie');}">영상 편집</b-button>
@@ -22,7 +19,7 @@
         <b-button squared size="lg" @click="()=>{this.$EventBus.$emit('sound');}">음향 편집</b-button>
       </div>
       <div class="m2">
-        <b-button squared size="lg" @click="()=>{this.$EventBus.$emit('draw');}">이미지 그리기</b-button>
+        <b-button squared size="lg" @click="()=>{this.$EventBus.$emit('draw');}">이미지 생성</b-button>
       </div>
     </div>
 
@@ -60,7 +57,7 @@
           <b-button squared @click="loadProject">선택 완료</b-button>
           <b-button squared variant="warning" @click="deleteProject">삭제</b-button>
           <b-button squared variant="success" @click="showPatchModal">수정</b-button>
-          <b-button squared variant="danger" @click="showLoadModal">취소</b-button>
+          <b-button squared variant="danger" @click="showLoadModalClose">취소</b-button>
         </div>
       </div>
     </project-inform>
@@ -100,7 +97,7 @@ import FileUpload from "../../components/fileUpload/filepond";
 export default {
   data() {
     return {
-      kind_menu: 2,
+      kind_menu: 1,
       newModal: false,
       loadModal: false,
       patchModal: false,
@@ -112,27 +109,24 @@ export default {
 
       projects: [],
       selected: null,
-      projects_cnt: 0
+      projects_cnt: 0,
     };
   },
   created() {
-      this.$EventBus.$on("filepond", () => {
-        this.uploadModal = false;
-      });
-  },
-  beforeMount() {
-    this.getProjectList();
+    this.$EventBus.$on("filepond", () => {
+      this.uploadModal = false;
+    });
   },
   methods: {
     getProjectList() {
+      console.log("프로젝트 목록 로드 시작");
       this.$http
         .get("https://beta.actoon.sokdak.me/api/project/", {
           headers: { Authorization: localStorage.getItem("auth") }
         })
         .then(response => {
-          let i
-          for (i in response.data) {
-            console.log(i)
+          this.projects_cnt = 0;
+          for (let i in response.data) {
             this.projects.push({
               value: response.data[i].name,
               text:
@@ -141,11 +135,14 @@ export default {
                 " / Description : " +
                 response.data[i].description
             });
+            this.projects_cnt++;
           }
-          this.projects_cnt = i;
+          console.log(
+            "총 " + this.projects_cnt + "개의 프로젝트 목록 로드 성공"
+          );
         })
         .catch(function(error) {
-          console.log(error.response);
+          console.log("프로젝트 목록 로드 실패");
         });
     },
     showUploadModal() {
@@ -154,16 +151,19 @@ export default {
     showNewModal() {
       this.newModal = !this.newModal;
     },
-    showLoadModal() {
+    showLoadModalOpen() {
+      this.projects = [];
+      this.getProjectList();
+      this.loadModal = !this.loadModal;
+    },
+    showLoadModalClose() {
       this.loadModal = !this.loadModal;
     },
     showPatchModal() {
       this.patchModal = !this.patchModal;
     },
-    kindMenu() {
-      this.kind_menu = !this.kind_menu;
-    },
     newProject() {
+      console.log("프로젝트 생성 시작");
       this.$http
         .put("https://beta.actoon.sokdak.me/api/project/", {
           name: this.name,
@@ -172,66 +172,69 @@ export default {
         .then(response => {
           alert("프로젝트가 생성되었습니다.");
           this.showNewModal();
-          this.kindMenu();
+          this.kind_menu = 2;
           localStorage.setItem("project", this.name);
+          console.log("프로젝트 생성 완료");
         })
         .catch(error => {
-          console.log(error.response);
           if (error.response.status == 400) {
             alert("이미 존재하는 프로젝트 이름입니다.");
+            console.log("프로젝트 생성 실패");
           }
         });
     },
     loadProject() {
-      this.projects = [];
+      console.log("프로젝트 로드 시작");
       this.$http
         .get("https://beta.actoon.sokdak.me/api/project/" + this.selected + "/")
         .then(response => {
-          this.showLoadModal();
-          this.kindMenu();
           localStorage.setItem("project", this.selected);
-          this.$EventBus.$emit("loadProject");
-          console.log("loadProject")
           this.$EventBus.$emit("loadCut", this.projects_cnt);
-          console.log("loadCut")
+          this.$EventBus.$emit("loadtask");
+          this.kind_menu = 2;
+          this.showLoadModalClose();
+          console.log("프로젝트 로드 성공");
         })
         .catch(error => {
-          console.log(error.response);
+          console.log("프로젝트 로드 실패");
           alert("잘못된 접근입니다.");
         });
     },
     deleteProject() {
+      /*
+      console.log("프로젝트 삭제 시작");
       this.$http
         .delete(
           "https://beta.actoon.sokdak.me/api/project/" + this.selected + "/"
         )
         .then(response => {
+          console.log("프로젝트 삭제 성공");
           alert("프로젝트가 삭제되었습니다.");
           this.loadProject();
         })
         .catch(error => {
-          console.log(error.response);
+          console.log("프로젝트 삭제 실패");
           alert("잘못된 접근입니다.");
         });
+        */
     },
 
     patchProject() {
       /*
+      console.log("프로젝트 수정 시작");
         this.$http
-        .patch("https://beta.actoon.sokdak.me/api/project/", {
+        .patch("https://beta.actoon.sokdak.me/api/project/" + this.selected + "/", {
           name: this.name,
           description: this.patchDes
         })
         .then(response => {
+          console.log("프로젝트 수정 성공");
           alert("프로젝트가 수정되었습니다.");
           this.loadProject();
           this.showPatchModal();
         })
         .catch(error => {
-          console.log(error.response);
-          if (error.response.status == 400) {
-            alert("이미 존재하는 프로젝트 이름입니다.");
-          }
+          console.log("프로젝스 수정 실패");
         });
         */
     }
@@ -250,6 +253,6 @@ export default {
 }
 .mainmenu > div > div.m2 {
   float: left;
-  width: 20%;
+  width: 25%;
 }
 </style>

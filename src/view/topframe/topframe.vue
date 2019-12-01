@@ -18,7 +18,7 @@
           :visible.sync="logoutModal">
           <div class="modal_body">
               <div class="label_container">
-                <label ref="안내문">로그아웃 하시겠습니까?</label> <br />
+                <label ref="안내문">로그아웃 하시겠습니까?</label> <br /><br />
               </div>
               <div class="label_container">
                 <b-button @click="logout" squared size="lg">로그아웃</b-button>
