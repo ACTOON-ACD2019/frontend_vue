@@ -10,15 +10,15 @@
       </div>
       <div class="header_right">
         <div class="info">
-          <b-button squared size="lg" :pressed.sync="logoutModal">로그아웃</b-button>
+          {{ user_id }}님 <br />
+          <b-button squared size="sm" :pressed.sync="logoutModal">로그아웃</b-button>
         </div>
         
-        <user-inform
-          :title = "user_id"
-          :visible.sync="logoutModal">
+        <user-inform :visible.sync="logoutModal">
           <div class="modal_body">
               <div class="label_container">
-                <label ref="안내문">로그아웃 하시겠습니까?</label> <br /><br />
+                <label ref="안내문">현재까지의 작업 내역은 자동 저장 됩니다. <br />
+                로그아웃 하시겠습니까?</label> <br /><br />
               </div>
               <div class="label_container">
                 <b-button @click="logout" squared size="lg">로그아웃</b-button>

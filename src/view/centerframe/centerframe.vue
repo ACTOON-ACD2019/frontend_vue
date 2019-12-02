@@ -19,6 +19,10 @@
     </div>
     <div class="middle_right">
       <div class="middle_right_up">
+        프로젝트 명<br />
+          {{ localStorage.getItem("project") }}
+      </div>
+      <div class="middle_right_middle">
         <user-layer />
       </div>
       <div class="middle_right_down">

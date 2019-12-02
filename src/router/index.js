@@ -33,7 +33,7 @@ const router = new Router({
     }
   ]
 })
-
+/*
 router.beforeEach((to, from, next) => {
   if (to.name === 'regist' || to.name ==='login') {
     if(localStorage.getItem('token')){
@@ -49,4 +49,5 @@ router.beforeEach((to, from, next) => {
   }
   next()
 })
+*/
 export default router
