@@ -12,7 +12,7 @@
   "dependencies": {
     "@lkmadushan/vue-tuicalendar": "^0.1.6",
     "@syncfusion/ej2-vue-inputs": "^17.3.28",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.1.0",
     "fabric": "^3.5.1",
