@@ -1,8 +1,8 @@
 <template>
   <div class="fabric">
-    <fabric-canvas>
+    <fabric-canvas :width="800" :height="400">
       <fabric-circle :id="2"></fabric-circle>
-      <fabric-image-from-url :id="'someUUID'"></fabric-image-from-url>
+      <fabric-image :url="url" :id="3"></fabric-image>
     </fabric-canvas>
   </div>
 </template>
@@ -14,18 +14,11 @@ export default {
   name: "fabric",
   data(){
     return {
-      url:"./img/1.jpg"
+      url:"../img/1.jpg"
     }
   },
   components: {
-    FabricCanvas: vueFabricWrapper.FabricCanvas,
-    FabricCircle: vueFabricWrapper.FabricCircle,
-    FabricImageFromUrl: vueFabricWrapper.FabricImageFromUrl
-  },
-  methods:{
-    print(){
-      console.log("움직임 감지")
-    }
+    FabricImage: vueFabricWrapper.FabricImageFromURL
   }
 };
 </script>

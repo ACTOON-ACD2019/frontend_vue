@@ -14,7 +14,7 @@
     </div>
     <div class="middle_center">
       <div class="middle_canvas">
-        <!--<fab-view />-->
+        <fab-view />
       </div>
     </div>
     <div class="middle_right">
@@ -22,20 +22,26 @@
         <user-layer />
       </div>
       <div class="middle_right_down">
-        <user-history />
+        <div class="userhistory">
+          <b-form-select v-model="selected" :options="tasks" :select-size="5"></b-form-select>
+          <b-button size="sm" variant="info" @click="deleteTask">최근 기록 되돌리기</b-button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import UserHistory from "../../components/userhistory";
 import UserLayer from "../../components/userlayer";
 import FabView from "../../components/fabric/canvas";
 
 export default {
   data() {
     return {
+      selected: "",
+      tasks: [],
+      deleteIdx: "",
+
       showcut: false,
       cuts: [
         {
@@ -50,8 +56,51 @@ export default {
     this.$EventBus.$on("loadCut", cnt => {
       this.getCutList(cnt);
     });
+    this.$EventBus.$on("loadtask", () => {
+      this.getTaskList();
+    });
   },
   methods: {
+    getTaskList() {
+      this.tasks = [];
+      this.$http
+        .get(
+          "https://beta.actoon.sokdak.me/api/task/" +
+            localStorage.getItem("project") +
+            "/"
+        )
+        .then(response => {
+          let i = "";
+          for (i in response.data) {
+            this.tasks.push({
+              value: i + 1,
+              text: i + " 아이콘 : " + response.data[i].effect
+              //나중에 삭제한 태스크도 프론트에서 스택으로 처리해서 넣을 예정
+            });
+          }
+          this.deleteIdx = i;
+        })
+        .catch(function(error) {
+          console.log(error.response);
+        });
+    },
+    deleteTask() {
+      this.$http
+        .delete(
+          "https://beta.actoon.sokdak.me/api/task/" +
+            localStorage.getItem("project") +
+            "/" +
+            this.deleteIdx +
+            "/"
+        )
+        .then(response => {
+          console.log("최근 기록 삭제 완료");
+          this.getTaskList();
+        })
+        .catch(function(error) {
+          console.log(error.response);
+        });
+    },
     getCutList(cnt) {
       console.log(
         "프로젝트 명 : " + localStorage.getItem("project") + "의 컷 로드 시작"
@@ -77,7 +126,7 @@ export default {
         });
     }
   },
-  components: { UserHistory, UserLayer, FabView }
+  components: { UserLayer, FabView }
 };
 </script>
 

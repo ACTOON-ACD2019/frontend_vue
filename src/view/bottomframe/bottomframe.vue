@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import OptionalMenu from "../../components/optionalmenu"
+import OptionalMenu from "./optionalmenu"
 
 export default {
   components: { OptionalMenu }

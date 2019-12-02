@@ -26,4 +26,7 @@ html, body{
   width: 100%;
 }
 
+.my-modal {
+  z-index:3;
+}
 </style>
