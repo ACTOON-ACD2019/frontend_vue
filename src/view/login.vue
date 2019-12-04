@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import Config from '../../config/config'
+
 export default {
   data() {
     return {
@@ -50,7 +52,7 @@ export default {
       console.log("로그인 시작");
       var instance = this.$http.create();
       instance.defaults.headers.common = {};
-      instance.post("https://beta.actoon.sokdak.me/api/auth/", {
+      instance.post(Config.link + "api/auth/", {
           headers: {
             'Authorization': null
           },
@@ -67,6 +69,7 @@ export default {
           history.go(0)
         })
         .catch(error => {
+          console.log(error.response.status)
             if (error.response.status == 400){
               console.log("로그인 실패")
               alert("아이디 혹은 비밀번호가 잘못되었습니다.");

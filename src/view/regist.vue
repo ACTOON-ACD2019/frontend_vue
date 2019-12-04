@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import Config from '../../config/config'
+
 export default {
   data() {
     return {
@@ -51,7 +53,7 @@ export default {
       console.log("회원가입 시작")
       var instance = this.$http.create();
       instance.defaults.headers.common = {};
-      instance.post("https://beta.actoon.sokdak.me/api/auth/register/", {
+      instance.post(Config.link + "api/auth/register/", {
           username: this.reg_username,
           password: this.reg_pass
         })

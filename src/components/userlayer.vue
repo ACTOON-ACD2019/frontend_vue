@@ -1,19 +1,26 @@
 <template>
   <div class="userlayer">
-    
+    adsfasdf  
   </div>
 </template>
 
 <script>
+export default {
+  data() {
+    return {
 
+    };
+  },
+  created() {
+    this.$EventBus.$on("addCanvasImage", url => {
+      
+    });
+  },
+}
 </script>
 
 <style scoped>
-.userhistory {
+.userlayer {
   height: 100%;
-  text-align: center;
-}
-.b-form-select {
-  height: 100px;
 }
 </style>

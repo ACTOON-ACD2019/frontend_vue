@@ -4,16 +4,18 @@ import Vue from 'vue'
 import axios from 'axios'
 import VModal from 'vue-js-modal'
 import VueClip from 'vue-clip'
- 
+
 import App from './App'
 import router from './router'
 
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import vueFabricWrapper from "vue-fabric-wrapper";
 
-Vue.use(vueFabricWrapper)
+import 'vue-fabric/dist/vue-fabric.min.css';
+import { Fabric } from 'vue-fabric';
+Vue.use(Fabric);
+
 Vue.use(VueClip)
 Vue.use(BootstrapVue)
 Vue.use(VModal);
@@ -29,5 +31,5 @@ new Vue({
   el: '#app',
   router,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
 })

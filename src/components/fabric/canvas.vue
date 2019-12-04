@@ -1,35 +1,44 @@
 <template>
-  <div class="fabric">
-    <fabric-canvas :width="800" :height="400">
-      <fabric-circle :id="2"></fabric-circle>
-      <fabric-image :url="url" :id="3"></fabric-image>
-    </fabric-canvas>
+  <div class="test">
+    <canvas id="cv1" />
   </div>
 </template>
 
 <script>
-import vueFabricWrapper from "vue-fabric-wrapper";
+import jQuery from "jquery";
+let $ = jQuery;
+//var canvas = new editor("cv1"); // initializing editor class with canvas id 'cv1'
 
 export default {
-  name: "fabric",
-  data(){
+  data() {
     return {
-      url:"../img/1.jpg"
-    }
+      width: 800,
+      height: 600,
+      canvas: new editor("cv1")
+    };
   },
-  components: {
-    FabricImage: vueFabricWrapper.FabricImageFromURL
+  mounted() {
+    this.canvas.init(this.width, this.height);
+  },
+  created() {
+    this.$EventBus.$on("addCanvasImage", url => {
+      console.log("캔버스에 이미지 생성");
+      this.canvas.addImage(url, null);
+    });
+  },
+  methods: {
+    addCanvasImage(url) {
+      console.log("캔버스에 이미지 생성");
+      this.canvas.addImage(url, null);
+    }
   }
 };
 </script>
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+.test {
+  position: absolute;
+  padding-top: 2%;
+  padding-left: 2%;
 }
 </style>

@@ -196,6 +196,7 @@
 
 <script>
 import MovieEffect from "../../components/showmodal";
+import Config from '../../../config/config'
 export default {
   data() {
     return {

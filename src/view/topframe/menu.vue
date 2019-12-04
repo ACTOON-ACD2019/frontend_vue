@@ -1,26 +1,22 @@
 <template>
   <div class="mainmenu">
-    <div v-if="kind_menu==1">
-      <div class="m1">
-        <b-button squared size="lg" @click="showNewModal">새 프로젝트</b-button>
-      </div>
-      <div class="m1">
-        <b-button squared size="lg" @click="showLoadModalOpen">프로젝트 불러오기</b-button>
-      </div>
+    <div class="m1">
+      <b-button squared size="lg" @click="showNewModal">새 프로젝트</b-button>
     </div>
-    <div v-else-if="kind_menu==2">
-      <div class="m2">
-        <b-button squared size="lg" @click="showUploadModal">이미지 추가</b-button>
-      </div>
-      <div class="m2">
-        <b-button squared size="lg" @click="()=>{this.$EventBus.$emit('movie');}">영상 편집</b-button>
-      </div>
-      <div class="m2">
-        <b-button squared size="lg" @click="()=>{this.$EventBus.$emit('sound');}">음향 편집</b-button>
-      </div>
-      <div class="m2">
-        <b-button squared size="lg" @click="()=>{this.$EventBus.$emit('draw');}">이미지 생성</b-button>
-      </div>
+    <div class="m1">
+      <b-button squared size="lg" @click="showLoadModalOpen">프로젝트 로드</b-button>
+    </div>
+    <div class="m1">
+      <b-button squared size="lg" @click="showUploadModal">이미지 추가</b-button>
+    </div>
+    <div class="m1">
+      <b-button squared size="lg" @click="()=>{this.$EventBus.$emit('movie');}">영상 편집</b-button>
+    </div>
+    <div class="m1">
+      <b-button squared size="lg" @click="()=>{this.$EventBus.$emit('sound');}">음향 편집</b-button>
+    </div>
+    <div class="m1">
+      <b-button squared size="lg" @click="()=>{this.$EventBus.$emit('draw');}">이미지 생성</b-button>
     </div>
 
     <project-inform title="프로젝트 생성" :visible.sync="newModal">
@@ -65,10 +61,14 @@
     <project-inform title="프로젝트 수정" :visible.sync="patchModal">
       <div class="modal_body">
         <div class="label_container">
-          <label ref="프로젝트 수정">프로젝트 수정</label>
+          <label ref="프로젝트 이름">프로젝트 이름</label>
+          <b-form-input id="input-default" placeholder="Enter your project name" v-model="patchName"></b-form-input>
+        </div>
+        <div class="label_container">
+          <label ref="프로젝트 설명">프로젝트 설명</label>
           <b-form-input
-            id="input-default"
-            placeholder="Enter your project Description"
+            id="input-default"  
+            placeholder="Enter your project description"
             v-model="patchDes"
           ></b-form-input>
         </div>
@@ -93,6 +93,7 @@
 <script>
 import ProjectInform from "../../components/showmodal";
 import FileUpload from "../../components/fileUpload/filepond";
+import Config from "../../../config/config";
 
 export default {
   data() {
@@ -105,12 +106,19 @@ export default {
 
       name: "",
       description: "",
+      patchName: "",
       patchDes: "",
 
       projects: [],
       selected: null,
-      projects_cnt: 0,
+      projects_cnt: 0
     };
+  },
+  watch: {
+    selected: function (val) {
+      this.patchName = val
+    }
+
   },
   created() {
     this.$EventBus.$on("filepond", () => {
@@ -120,8 +128,10 @@ export default {
   methods: {
     getProjectList() {
       console.log("프로젝트 목록 로드 시작");
+      this.projects_cnt = 0;
+      this.projects = [];
       this.$http
-        .get("https://beta.actoon.sokdak.me/api/project/", {
+        .get(Config.link + "api/project/", {
           headers: { Authorization: localStorage.getItem("auth") }
         })
         .then(response => {
@@ -165,7 +175,7 @@ export default {
     newProject() {
       console.log("프로젝트 생성 시작");
       this.$http
-        .put("https://beta.actoon.sokdak.me/api/project/", {
+        .put(Config.link + "api/project/", {
           name: this.name,
           description: this.description
         })
@@ -185,8 +195,9 @@ export default {
     },
     loadProject() {
       console.log("프로젝트 로드 시작");
+
       this.$http
-        .get("https://beta.actoon.sokdak.me/api/project/" + this.selected + "/")
+        .get(Config.link + "api/project/" + this.selected + "/")
         .then(response => {
           localStorage.setItem("project", this.selected);
           this.$EventBus.$emit("loadCut", this.projects_cnt);
@@ -201,42 +212,36 @@ export default {
         });
     },
     deleteProject() {
-      /*
       console.log("프로젝트 삭제 시작");
       this.$http
-        .delete(
-          "https://beta.actoon.sokdak.me/api/project/" + this.selected + "/"
-        )
+        .delete(Config.link + "api/project/" + this.selected + "/")
         .then(response => {
           console.log("프로젝트 삭제 성공");
           alert("프로젝트가 삭제되었습니다.");
-          this.loadProject();
+          this.getProjectList();
         })
         .catch(error => {
           console.log("프로젝트 삭제 실패");
           alert("잘못된 접근입니다.");
         });
-        */
     },
 
     patchProject() {
-      /*
       console.log("프로젝트 수정 시작");
-        this.$http
-        .patch("https://beta.actoon.sokdak.me/api/project/" + this.selected + "/", {
-          name: this.name,
+      this.$http
+        .patch(Config.link + "api/project/" + this.selected + "/", {
+          name: this.patchName,
           description: this.patchDes
         })
         .then(response => {
           console.log("프로젝트 수정 성공");
           alert("프로젝트가 수정되었습니다.");
-          this.loadProject();
+          this.getProjectList();
           this.showPatchModal();
         })
         .catch(error => {
           console.log("프로젝스 수정 실패");
         });
-        */
     }
   },
   components: { ProjectInform, FileUpload }
@@ -247,12 +252,8 @@ export default {
 .mainmenu {
   padding-top: 10px;
 }
-.mainmenu > div > div.m1 {
+.mainmenu > div.m1 {
   float: left;
-  width: 50%;
-}
-.mainmenu > div > div.m2 {
-  float: left;
-  width: 25%;
+  width: 16%;
 }
 </style>

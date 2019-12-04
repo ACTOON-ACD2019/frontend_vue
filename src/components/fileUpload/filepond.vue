@@ -6,19 +6,24 @@
         @change="upload($event.target.name, $event.target.files)"
         @drop="upload($event.target.name, $event.target.files)"
       />
+      <br /><br /><br />
       <h3>Drag and drop to upload content!</h3>
       <br />
       <h4>...or click to select a file from your computer</h4>
+      <br /><br /><br />
     </div>
 </template>
 
 <script>
+import Config from '../../../config/config'
 export default {
   methods: {
     upload(name, files) {
       console.log("파일 업로드 시작");
       const formData = new FormData();
-      const url = "https://beta.actoon.sokdak.me/api/media/" + localStorage.getItem("project") + "/";
+      
+      const url = Config.link + "api/media/" + localStorage.getItem("project") + "/";
+      console.log(url);
       formData.append('media_type', 'TO');
       formData.append('file', files[0]);
       this.$http
@@ -43,7 +48,7 @@ export default {
   outline: 2px dashed #aaa;
   background: #7fb4dd;
   width: 500px;
-  height: 100px;
+  height: auto;
   position: relative;
   margin: 0 auto;
 }

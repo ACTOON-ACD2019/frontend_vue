@@ -19,6 +19,7 @@
     "fabric-customise-controls": "^2.0.6-beta",
     "filepond": "^4.7.4",
     "filepond-plugin-file-validate-type": "^1.2.4",
+    "jquery": "^3.4.1",
     "node-wifi": "^2.0.4",
     "tui-calendar": "^1.8.0",
     "vue": "^2.5.2",

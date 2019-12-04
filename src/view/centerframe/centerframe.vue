@@ -5,9 +5,10 @@
         <div v-if="showcut">
           <div v-for="cut of cuts" :key="cut.idx">
             <div class="image">
-              <img :src="cut.url" />
+              <img :src="cut.url" width="100" height="100" @click="addCanvas(cut.url)" />
+              <br />
             </div>
-            <div class="fname">{{ cut.type }} {{ cut.sequence }}</div>
+            <!--<div class="fname">{{ cut.type }} {{ cut.sequence }}</div>-->
           </div>
         </div>
       </div>
@@ -19,15 +20,16 @@
     </div>
     <div class="middle_right">
       <div class="middle_right_up">
-        프로젝트 명<br />
-          {{ localStorage.getItem("project") }}
+        프로젝트 명
+        <br />
+        {{ project }}
       </div>
       <div class="middle_right_middle">
-        <user-layer />
+        <!--<user-layer />-->
       </div>
       <div class="middle_right_down">
         <div class="userhistory">
-          <b-form-select v-model="selected" :options="tasks" :select-size="5"></b-form-select>
+          <b-form-select v-model="selected" :options="tasks" :select-size="9"></b-form-select>
           <b-button size="sm" variant="info" @click="deleteTask">최근 기록 되돌리기</b-button>
         </div>
       </div>
@@ -38,20 +40,38 @@
 <script>
 import UserLayer from "../../components/userlayer";
 import FabView from "../../components/fabric/canvas";
+import Config from "../../../config/config";
 
 export default {
   data() {
     return {
       selected: "",
-      tasks: [],
+      tasks_size: 0,
+      tasks: [
+        { value: "1", text: "1" },
+        { value: "1", text: "1" },
+        { value: "1", text: "1" },
+        { value: "1", text: "1" },
+        { value: "1", text: "1" },
+        { value: "1", text: "1" },
+        { value: "1", text: "1" },
+        { value: "1", text: "1" },
+        { value: "1", text: "1" },
+        { value: "1", text: "1" },
+        { value: "1", text: "1" },
+        { value: "1", text: "1" },
+        { value: "1", text: "1" },
+        { value: "1", text: "1" },
+        { value: "1", text: "1" }
+      ],
       deleteIdx: "",
-
+      project: localStorage.getItem("project"),
       showcut: false,
       cuts: [
         {
-          url: String,
-          type: String,
-          sequence: 0
+          url: String
+          //type: String,
+          //sequence: 0
         }
       ]
     };
@@ -60,19 +80,17 @@ export default {
     this.$EventBus.$on("loadCut", cnt => {
       this.getCutList(cnt);
     });
+    /*
     this.$EventBus.$on("loadtask", () => {
       this.getTaskList();
     });
+    */
   },
   methods: {
     getTaskList() {
       this.tasks = [];
       this.$http
-        .get(
-          "https://beta.actoon.sokdak.me/api/task/" +
-            localStorage.getItem("project") +
-            "/"
-        )
+        .get(Config.link + "api/task/" + localStorage.getItem("project") + "/")
         .then(response => {
           let i = "";
           for (i in response.data) {
@@ -91,7 +109,8 @@ export default {
     deleteTask() {
       this.$http
         .delete(
-          "https://beta.actoon.sokdak.me/api/task/" +
+          Config.link +
+            "api/task/" +
             localStorage.getItem("project") +
             "/" +
             this.deleteIdx +
@@ -109,17 +128,35 @@ export default {
       console.log(
         "프로젝트 명 : " + localStorage.getItem("project") + "의 컷 로드 시작"
       );
+
+      // this.cuts = [];
+      //     this.cuts.push({url:"https://post-phinf.pstatic.net/MjAxODAxMjJfMTU4/MDAxNTE2NTk5MzE0Mzk3.tpo98J5uKOWXI_DKeVshDaXv0A-6fpTvDdbDWX3Uqbkg.dJcyQ8Y4rABIDFt2kbJRsUVjgLmT0Mo9hYVurPAgyfIg.JPEG/6-1.jpg?type=w1200"},
+      //     {url:"https://post-phinf.pstatic.net/MjAxODAxMjJfMTcx/MDAxNTE2NTk5MjU0Njg0.x0xAsVSjoF-vBmiwyQbfUy42yNF1qI4IOWlMGaTq-Ykg.XlcaWo5N9UX9C4Zbe3PMb8_c1FnySQL3oYPGZkO1jgcg.JPEG/1.jpg?type=w1200"},
+      //     {url:"https://post-phinf.pstatic.net/MjAxODAxMjJfMzIg/MDAxNTE2NTk5MjczNjY1.Ss6hMgUgPlt7bq_sqvDswv-_RMqrmpiCpLd3vLev2fQg.gK7M1ap5NCUr7Nv8PGrmd4GVG2mU56M79X3MyhTJQ5kg.JPEG/2.jpg?type=w1200"},
+      //     {url:"https://post-phinf.pstatic.net/MjAxODAxMjJfOSAg/MDAxNTE2NTk5Mjc4NTIw.m1AcAEgafuasLtQTN3BqAHGYS7YsCL1sBVLScrHY6yQg.J8QUzfWq-SwdmQIua17d9TN64XBRQyyUv0Da80-4i9Eg.JPEG/3.jpg?type=w1200"},
+      //     {url:"https://post-phinf.pstatic.net/MjAxODAxMjJfMjYy/MDAxNTE2NTk5MjgzMjU2.goOTFBHTV6o1jLu3fPGlw_Ey3WedV_Kxb3oJHHCKCHgg.AOcrqJTu8AX0tYNE6NHoGF4jq1huYvThU3YmVIwvCTog.JPEG/4.jpg?type=w1200"},
+      //     {url:"https://post-phinf.pstatic.net/MjAxODAxMjJfMjQg/MDAxNTE2NTk5Mjg5NTM1.iMv8cIGzlZfoRzRqnVBu2phY4mWVzFKD-aJAE9ebJZwg.wAnqevBrV49oS_uuooy91-YOQ3ZshL4aY5aAqjhmvPsg.JPEG/5.jpg?type=w1200"},
+      //     {url:"https://post-phinf.pstatic.net/MjAxODAxMjJfNDUg/MDAxNTE2NTk5MjM1NzYx.OS5TeZfmicJ96mjsme6r003Kk-qMZPhzZoRRZIAtjd4g.MS4jAzRFPfd8LRYmX-mlLbo4zywY-Pmsu6ss8o1rlfYg.JPEG/7.jpg?type=w1200"},
+      //     {url:"https://post-phinf.pstatic.net/MjAxODAxMjJfMzAw/MDAxNTE2NTk5MjMxMzI5.QPoiFzAtZXaexijdSx_hcYLKF_lElYFAxWUQRRZq0JMg.XzQD2sW-1xjB2QyNrRHr4QYRQk3klaq4EN33XlxkDTkg.JPEG/8.jpg?type=w1200"},
+      //     )
+      //     this.showcut = true;
+
       this.$http
-        .get("https://beta.actoon.sokdak.me/api/cut/rrr/0/")
+        .get(Config.link + "api/cut/" + localStorage.getItem("project") + "/")
         .then(response => {
           this.cuts = [];
-          for (let i in response.data) {
-            this.cuts.push({
-              url: response.data[i].file,
-              type: response.data[i].type,
-              sequence: response.data[i].sequence
-            });
+          var obj = JSON.parse(response.data);
+          for (let j in obj) {
+            for (let i in obj[j]) {
+              console.log(response);
+              this.cuts.push({
+                url: Config.link + "media/" + obj[j][i].file,
+                type: obj[j][i].type,
+                sequence: obj[j][i].sequence
+              });
+            }
           }
+
           this.showcut = true;
           console.log(this.cuts);
           console.log("컷 로드 성공");
@@ -128,6 +165,9 @@ export default {
           console.log(error);
           console.log("컷 로드 실패");
         });
+    },
+    addCanvas(url) {
+      this.$EventBus.$emit("addCanvasImage", url);
     }
   },
   components: { UserLayer, FabView }
@@ -138,6 +178,7 @@ export default {
 .middle {
   height: calc(100% - 160px);
   width: 100%;
+  text-align: center;
 }
 
 .middle_left {
@@ -145,6 +186,7 @@ export default {
   border-right-width: 2px;
   border-right-style: inset;
   border-right-color: rgb(41, 41, 41);
+  overflow: auto;
 }
 
 .middle_center {
@@ -152,24 +194,34 @@ export default {
 }
 
 .middle_canvas {
-  margin-top: 70px;
-  margin-left: 150px;
-  width: 70%;
-  height: 70%;
+  width: 100%;
+  height: 100%;
   vertical-align: middle;
   text-align: center;
-  background-color: gray;
 }
 
 .middle_right {
+  height: 100%;
   width: 150px;
   border-left-width: 2px;
   border-left-style: inset;
   border-left-color: rgb(41, 41, 41);
 }
 
-.middle_right > div {
-  height: 50%;
+.middle_right_up {
+  height: 50px;
+  border-bottom-width: 2px;
+  border-bottom-color: rgb(41, 41, 41);
+}
+.middle_right_middle {
+  height: -moz-calc((100% - (50px))/2);
+  height: -webkit-calc((100% - (50px))/2);
+  height: calc((100% - (50px)) / 2);
+}
+.middle_right_down {
+  height: -moz-calc((100% - (50px))/2);
+  height: -webkit-calc((100% - (50px))/2);
+  height: calc((100% - (50px)) / 2);
 }
 
 div.middle > div {
