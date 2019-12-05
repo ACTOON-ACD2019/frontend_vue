@@ -25,10 +25,11 @@
         {{ project }}
       </div>
       <div class="middle_right_middle">
-        <!--<user-layer />-->
+        <user-layer />
       </div>
       <div class="middle_right_down">
         <div class="userhistory">
+          작업 기록
           <b-form-select v-model="selected" :options="tasks" :select-size="9"></b-form-select>
           <b-button size="sm" variant="info" @click="deleteTask">최근 기록 되돌리기</b-button>
         </div>
@@ -39,7 +40,7 @@
 
 <script>
 import UserLayer from "../../components/userlayer";
-import FabView from "../../components/fabric/canvas";
+import FabView from "../../components/canvas";
 import Config from "../../../config/config";
 
 export default {
@@ -69,16 +70,17 @@ export default {
       showcut: false,
       cuts: [
         {
-          url: String
-          //type: String,
-          //sequence: 0
+          url: String,
+          type: String,
+          sequence: 0
         }
       ]
     };
   },
+  
   created() {
-    this.$EventBus.$on("loadCut", cnt => {
-      this.getCutList(cnt);
+    this.$EventBus.$on("loadCut", () => {
+      this.getCutList();
     });
     /*
     this.$EventBus.$on("loadtask", () => {
@@ -124,7 +126,7 @@ export default {
           console.log(error.response);
         });
     },
-    getCutList(cnt) {
+    getCutList() {
       console.log(
         "프로젝트 명 : " + localStorage.getItem("project") + "의 컷 로드 시작"
       );

@@ -24,14 +24,9 @@ export default {
     this.$EventBus.$on("addCanvasImage", url => {
       console.log("캔버스에 이미지 생성");
       this.canvas.addImage(url, null);
+      this.$EventBus.$emit("refreshLayer");
     });
   },
-  methods: {
-    addCanvasImage(url) {
-      console.log("캔버스에 이미지 생성");
-      this.canvas.addImage(url, null);
-    }
-  }
 };
 </script>
 

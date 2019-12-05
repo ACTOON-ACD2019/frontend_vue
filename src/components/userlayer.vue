@@ -1,6 +1,7 @@
 <template>
   <div class="userlayer">
-    adsfasdf  
+    레이어 목록
+    <b-form-select v-model="selected" :options="layers" :select-size="9"></b-form-select>
   </div>
 </template>
 
@@ -8,15 +9,16 @@
 export default {
   data() {
     return {
-
+      selected:"",
+      layers:[]
     };
   },
   created() {
-    this.$EventBus.$on("addCanvasImage", url => {
-      
+    this.$EventBus.$on("refreshLayer", () => {
+      console.log("레이어 갱신");
     });
-  },
-}
+  }
+};
 </script>
 
 <style scoped>

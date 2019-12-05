@@ -69,11 +69,11 @@ export default {
           history.go(0)
         })
         .catch(error => {
-          console.log(error.response.status)
-            if (error.response.status == 400){
-              console.log("로그인 실패")
-              alert("아이디 혹은 비밀번호가 잘못되었습니다.");
-            }
+          console.log(error.response)
+            // if (error.response.status == 400){
+            //   console.log("로그인 실패")
+            //   alert("아이디 혹은 비밀번호가 잘못되었습니다.");
+            // }
         });
     }
     

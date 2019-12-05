@@ -14,8 +14,9 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import 'vue-fabric/dist/vue-fabric.min.css';
 import { Fabric } from 'vue-fabric';
-Vue.use(Fabric);
 
+
+Vue.use(Fabric);
 Vue.use(VueClip)
 Vue.use(BootstrapVue)
 Vue.use(VModal);

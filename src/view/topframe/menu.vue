@@ -92,13 +92,12 @@
 
 <script>
 import ProjectInform from "../../components/showmodal";
-import FileUpload from "../../components/fileUpload/filepond";
+import FileUpload from "../../components/filepond";
 import Config from "../../../config/config";
 
 export default {
   data() {
     return {
-      kind_menu: 1,
       newModal: false,
       loadModal: false,
       patchModal: false,
@@ -122,7 +121,7 @@ export default {
   },
   created() {
     this.$EventBus.$on("filepond", () => {
-      this.uploadModal = false;
+      this.showUploadModal();
     });
   },
   methods: {
@@ -182,7 +181,6 @@ export default {
         .then(response => {
           alert("프로젝트가 생성되었습니다.");
           this.showNewModal();
-          this.kind_menu = 2;
           localStorage.setItem("project", this.name);
           console.log("프로젝트 생성 완료");
         })
@@ -195,14 +193,12 @@ export default {
     },
     loadProject() {
       console.log("프로젝트 로드 시작");
-
       this.$http
         .get(Config.link + "api/project/" + this.selected + "/")
         .then(response => {
           localStorage.setItem("project", this.selected);
-          this.$EventBus.$emit("loadCut", this.projects_cnt);
-          this.$EventBus.$emit("loadtask");
-          this.kind_menu = 2;
+          this.$EventBus.$emit("loadCut");
+          //this.$EventBus.$emit("loadtask");
           this.showLoadModalClose();
           console.log("프로젝트 로드 성공");
         })
