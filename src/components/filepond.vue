@@ -50,7 +50,8 @@ export default {
             }
           })
             .then(response => {
-              alert("성공적으로 업로드 되었습니다.")
+              console.log(response);
+              alert("성공적으로 업로드 되었습니다.");
               load(response.data);
               this.$EventBus.$emit("filepond");
               this.$EventBus.$emit("loadCut");

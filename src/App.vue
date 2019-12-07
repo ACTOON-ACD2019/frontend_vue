@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <router-view/>
+    <router-view :key="$route.fullPath"/>
   </div>
 </template>
 
@@ -13,20 +13,19 @@ export default {
 <style>
 
 html, body{
-  margin: 0;
-  padding: 0;
   height: 100%;
   width: 100%;
 }
 
 .app {
-  margin: 0;
-  padding: 0;
   height: 100%;
   width: 100%;
 }
 
 .my-modal {
-  z-index:3;
+  z-index:5;
+}
+.tui-image-editor-container .color-picker-control {
+  padding: 2px;
 }
 </style>

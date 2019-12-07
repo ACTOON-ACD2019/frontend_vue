@@ -1,22 +1,24 @@
 <template>
   <div class="mainmenu">
-    <div class="m1">
-      <b-button squared size="lg" @click="showNewModal">새 프로젝트</b-button>
+    <div v-if="isLoaded" class="menu1">
+      <b-dropdown id="dropdown-1" text="Menu" block class="m-2" menu-class="w-100">
+        <b-dropdown-item @click="showNewModal">New Project</b-dropdown-item>
+        <b-dropdown-item @click="showLoadModalOpen">Project Load</b-dropdown-item>
+      </b-dropdown>
     </div>
-    <div class="m1">
-      <b-button squared size="lg" @click="showLoadModalOpen">프로젝트 로드</b-button>
-    </div>
-    <div class="m1">
-      <b-button squared size="lg" @click="showUploadModal">이미지 추가</b-button>
-    </div>
-    <div class="m1">
-      <b-button squared size="lg" @click="()=>{this.$EventBus.$emit('movie');}">영상 편집</b-button>
-    </div>
-    <div class="m1">
-      <b-button squared size="lg" @click="()=>{this.$EventBus.$emit('sound');}">음향 편집</b-button>
-    </div>
-    <div class="m1">
-      <b-button squared size="lg" @click="()=>{this.$EventBus.$emit('draw');}">이미지 생성</b-button>
+    <div v-else class="menu2">
+      <div class="menu2_thum">
+        <project-thumnail :src="projects_cnt" :date="projects_cnt" :desc="desc"></project-thumnail>
+      </div>
+      <div class="menu2_menu">
+        <b-dropdown id="dropdown-2" text="Menu" block class="m-2" menu-class="w-100">
+          <b-dropdown-item @click="showNewModal">New Project</b-dropdown-item>
+          <b-dropdown-item @click="showLoadModalOpen">Project Load</b-dropdown-item>
+          <b-dropdown-item @click="showUploadModal">Add Image</b-dropdown-item>
+          <b-dropdown-item @click="()=>{this.$EventBus.$emit('showEditor',1);}">Video Editor</b-dropdown-item>
+          <b-dropdown-item @click="()=>{this.$EventBus.$emit('showEditor',2);}">Image Editor</b-dropdown-item>
+        </b-dropdown>
+      </div>
     </div>
 
     <project-inform title="프로젝트 생성" :visible.sync="newModal">
@@ -62,12 +64,16 @@
       <div class="modal_body">
         <div class="label_container">
           <label ref="프로젝트 이름">프로젝트 이름</label>
-          <b-form-input id="input-default" placeholder="Enter your project name" v-model="patchName"></b-form-input>
+          <b-form-input
+            id="input-default"
+            placeholder="Enter your project name"
+            v-model="patchName"
+          ></b-form-input>
         </div>
         <div class="label_container">
           <label ref="프로젝트 설명">프로젝트 설명</label>
           <b-form-input
-            id="input-default"  
+            id="input-default"
             placeholder="Enter your project description"
             v-model="patchDes"
           ></b-form-input>
@@ -94,6 +100,7 @@
 import ProjectInform from "../../components/showmodal";
 import FileUpload from "../../components/filepond";
 import Config from "../../../config/config";
+import ProjectThumnail from "../../components/projectthumnail";
 
 export default {
   data() {
@@ -109,15 +116,23 @@ export default {
       patchDes: "",
 
       projects: [],
-      selected: null,
-      projects_cnt: 0
+      projects_cnt: 0,
+      project: "",
+      desc: "",
+      selected: true,
+      isLoaded: true
     };
   },
   watch: {
-    selected: function (val) {
-      this.patchName = val
+    selected: function(val) {
+      this.patchName = val;
+    },
+    project: function() {
+      this.isLoaded = false;
     }
-
+  },
+  mounted() {
+    if (localStorage.getItem("project") != null) this.isLoaded = false;
   },
   created() {
     this.$EventBus.$on("filepond", () => {
@@ -125,6 +140,43 @@ export default {
     });
   },
   methods: {
+    showUploadModal() {
+      this.uploadModal = !this.uploadModal;
+    },
+    showNewModal() {
+      this.newModal = !this.newModal;
+    },
+    showLoadModalOpen() {
+      this.projects = [];
+      this.getProjectList();
+      this.loadModal = !this.loadModal;
+    },
+    showLoadModalClose() {
+      this.loadModal = !this.loadModal;
+    },
+    showPatchModal() {
+      this.patchModal = !this.patchModal;
+    },
+    newProject() {
+      console.log("프로젝트 생성 시작");
+      this.$http
+        .put(Config.link + "api/project/", {
+          name: this.name,
+          description: this.description
+        })
+        .then(response => {
+          localStorage.setItem("project", this.name);
+          console.log("프로젝트 생성 완료");
+          alert("프로젝트가 생성되었습니다.");
+          this.showNewModal();
+        })
+        .catch(error => {
+          if (error.response.status == 400) {
+            alert("이미 존재하는 프로젝트 이름입니다.");
+            console.log("프로젝트 생성 실패");
+          }
+        });
+    },
     getProjectList() {
       console.log("프로젝트 목록 로드 시작");
       this.projects_cnt = 0;
@@ -154,53 +206,18 @@ export default {
           console.log("프로젝트 목록 로드 실패");
         });
     },
-    showUploadModal() {
-      this.uploadModal = !this.uploadModal;
-    },
-    showNewModal() {
-      this.newModal = !this.newModal;
-    },
-    showLoadModalOpen() {
-      this.projects = [];
-      this.getProjectList();
-      this.loadModal = !this.loadModal;
-    },
-    showLoadModalClose() {
-      this.loadModal = !this.loadModal;
-    },
-    showPatchModal() {
-      this.patchModal = !this.patchModal;
-    },
-    newProject() {
-      console.log("프로젝트 생성 시작");
-      this.$http
-        .put(Config.link + "api/project/", {
-          name: this.name,
-          description: this.description
-        })
-        .then(response => {
-          alert("프로젝트가 생성되었습니다.");
-          this.showNewModal();
-          localStorage.setItem("project", this.name);
-          console.log("프로젝트 생성 완료");
-        })
-        .catch(error => {
-          if (error.response.status == 400) {
-            alert("이미 존재하는 프로젝트 이름입니다.");
-            console.log("프로젝트 생성 실패");
-          }
-        });
-    },
     loadProject() {
       console.log("프로젝트 로드 시작");
       this.$http
         .get(Config.link + "api/project/" + this.selected + "/")
         .then(response => {
-          localStorage.setItem("project", this.selected);
+          console.log("프로젝트 로드 성공");
+          localStorage.setItem("project", response.data.name);
+          this.project = response.data.name;
+          this.desc = response.data.description;
           this.$EventBus.$emit("loadCut");
           //this.$EventBus.$emit("loadtask");
           this.showLoadModalClose();
-          console.log("프로젝트 로드 성공");
         })
         .catch(error => {
           console.log("프로젝트 로드 실패");
@@ -240,16 +257,25 @@ export default {
         });
     }
   },
-  components: { ProjectInform, FileUpload }
+  components: { ProjectInform, FileUpload, ProjectThumnail }
 };
 </script>
 
 <style scoped>
-.mainmenu {
-  padding-top: 10px;
+#dropdown-1 {
+  float: center;
+  width: 99%;
 }
-.mainmenu > div.m1 {
-  float: left;
-  width: 16%;
+#dropdown-2 {
+  width: 100%;
+}
+.menu2 {
+  width: 100%;
+  height: 100%;
+}
+.menu2 > div {
+  width: 45%;
+  display: inline-block;
+  vertical-align: middle;
 }
 </style>

@@ -72,4 +72,7 @@ $module: 'my-modal';
     margin-top:50px;
   }
 }
+.my-modal {
+  color: black;
+}
 </style>

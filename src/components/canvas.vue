@@ -1,20 +1,19 @@
 <template>
-  <div class="test">
-    <canvas id="cv1" />
+  <div class="vue-canvas">
+    <canvas id="cv1" ref="canv" />
   </div>
 </template>
 
 <script>
 import jQuery from "jquery";
-let $ = jQuery;
-//var canvas = new editor("cv1"); // initializing editor class with canvas id 'cv1'
 
 export default {
   data() {
     return {
-      width: 800,
-      height: 600,
-      canvas: new editor("cv1")
+      width: 640,
+      height: 480,
+      canvas: new editor("cv1"),
+      layers: []
     };
   },
   mounted() {
@@ -22,18 +21,28 @@ export default {
   },
   created() {
     this.$EventBus.$on("addCanvasImage", url => {
-      console.log("캔버스에 이미지 생성");
+      console.log("이미지 생성 url = ", url);
       this.canvas.addImage(url, null);
-      this.$EventBus.$emit("refreshLayer");
+
+
+      
+      // for (let i in (this.canvas.canvas._objects.length+1)){
+      //   this.layers.push({
+      //     name : this.canvas.canvas._objects[i].name,
+      //     type : "이미지"
+      //   })
+      // }
+      // console.log(this.canvas.canvas._objects[0])
+      // console.log(this.layers)
+      //this.$EventBus.$emit("refreshLayer",this.canvas.canvas._objects);
     });
-  },
+  }
 };
 </script>
 
 <style scoped>
-.test {
+.vue-canvas {
   position: absolute;
-  padding-top: 2%;
-  padding-left: 2%;
+  text-align: center;
 }
 </style>

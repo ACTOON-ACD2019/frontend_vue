@@ -1,29 +1,35 @@
 <template>
   <div class="middle">
     <div class="middle_left">
-      <div class="loadcut">
-        <div v-if="showcut">
-          <div v-for="cut of cuts" :key="cut.idx">
+      <div class="loadcut scrollbar" id="style-1">
+        <div v-if="showcut" class="force-overflow">
+          <div
+            v-for="cut of cuts"
+            :key="cut.idx"
+            @click="addCanvas(cut.url)"
+            style="cursor: pointer"
+          >
             <div class="image">
-              <img :src="cut.url" width="100" height="100" @click="addCanvas(cut.url)" />
+              <img :src="cut.url" width="100" height="100" />
               <br />
             </div>
-            <!--<div class="fname">{{ cut.type }} {{ cut.sequence }}</div>-->
+            <div class="fname">{{ cut.type }} {{ cut.sequence }}</div>
           </div>
         </div>
       </div>
     </div>
     <div class="middle_center">
       <div class="middle_canvas">
-        <fab-view />
+        <fab-view />asdfasdf
+        <!-- <div v-if="editor == 1">
+          <fab-view />
+        </div>
+        <div v-else-if="editor == 2">
+          <tui-editor />
+        </div>-->
       </div>
     </div>
     <div class="middle_right">
-      <div class="middle_right_up">
-        프로젝트 명
-        <br />
-        {{ project }}
-      </div>
       <div class="middle_right_middle">
         <user-layer />
       </div>
@@ -41,6 +47,7 @@
 <script>
 import UserLayer from "../../components/userlayer";
 import FabView from "../../components/canvas";
+import TuiEditor from "../../components/tuieditor";
 import Config from "../../../config/config";
 
 export default {
@@ -68,6 +75,7 @@ export default {
       deleteIdx: "",
       project: localStorage.getItem("project"),
       showcut: false,
+      editor: 0,
       cuts: [
         {
           url: String,
@@ -77,10 +85,12 @@ export default {
       ]
     };
   },
-  
   created() {
     this.$EventBus.$on("loadCut", () => {
       this.getCutList();
+    });
+    this.$EventBus.$on("showEditor", kind => {
+      this.showEditor(kind);
     });
     /*
     this.$EventBus.$on("loadtask", () => {
@@ -130,7 +140,6 @@ export default {
       console.log(
         "프로젝트 명 : " + localStorage.getItem("project") + "의 컷 로드 시작"
       );
-
       // this.cuts = [];
       //     this.cuts.push({url:"https://post-phinf.pstatic.net/MjAxODAxMjJfMTU4/MDAxNTE2NTk5MzE0Mzk3.tpo98J5uKOWXI_DKeVshDaXv0A-6fpTvDdbDWX3Uqbkg.dJcyQ8Y4rABIDFt2kbJRsUVjgLmT0Mo9hYVurPAgyfIg.JPEG/6-1.jpg?type=w1200"},
       //     {url:"https://post-phinf.pstatic.net/MjAxODAxMjJfMTcx/MDAxNTE2NTk5MjU0Njg0.x0xAsVSjoF-vBmiwyQbfUy42yNF1qI4IOWlMGaTq-Ykg.XlcaWo5N9UX9C4Zbe3PMb8_c1FnySQL3oYPGZkO1jgcg.JPEG/1.jpg?type=w1200"},
@@ -146,11 +155,11 @@ export default {
       this.$http
         .get(Config.link + "api/cut/" + localStorage.getItem("project") + "/")
         .then(response => {
+          console.log("컷 목록 불러오기 성공");
           this.cuts = [];
           var obj = JSON.parse(response.data);
           for (let j in obj) {
             for (let i in obj[j]) {
-              console.log(response);
               this.cuts.push({
                 url: Config.link + "media/" + obj[j][i].file,
                 type: obj[j][i].type,
@@ -158,76 +167,93 @@ export default {
               });
             }
           }
-
           this.showcut = true;
-          console.log(this.cuts);
-          console.log("컷 로드 성공");
         })
         .catch(function(error) {
-          console.log(error);
           console.log("컷 로드 실패");
         });
     },
     addCanvas(url) {
       this.$EventBus.$emit("addCanvasImage", url);
+    },
+    showEditor(kind) {
+      this.editor = kind;
     }
   },
-  components: { UserLayer, FabView }
+  components: { UserLayer, FabView, TuiEditor }
 };
 </script>
 
 <style scoped>
 .middle {
-  height: calc(100% - 160px);
+  height: calc(100% - 60px);
   width: 100%;
   text-align: center;
 }
 
 .middle_left {
-  width: 150px;
+  width: 200px;
   border-right-width: 2px;
   border-right-style: inset;
   border-right-color: rgb(41, 41, 41);
-  overflow: auto;
+}
+
+.scrollbar {
+  background-color: #e4e4e4;
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+#style-1::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  background-color: #f5f5f5;
+}
+
+#style-1::-webkit-scrollbar {
+  width: 5px;
+  background-color: #f5f5f5;
+}
+
+#style-1::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #555;
 }
 
 .middle_center {
-  width: calc(100% - 300px);
+  width: calc(100% - 330px);
+  
 }
 
 .middle_canvas {
   width: 100%;
   height: 100%;
-  vertical-align: middle;
-  text-align: center;
+  
 }
 
 .middle_right {
   height: 100%;
-  width: 150px;
+  width: 130px;
   border-left-width: 2px;
   border-left-style: inset;
   border-left-color: rgb(41, 41, 41);
-}
-
-.middle_right_up {
-  height: 50px;
-  border-bottom-width: 2px;
-  border-bottom-color: rgb(41, 41, 41);
+  background-color: #393949;
 }
 .middle_right_middle {
-  height: -moz-calc((100% - (50px))/2);
-  height: -webkit-calc((100% - (50px))/2);
-  height: calc((100% - (50px)) / 2);
+  height: -moz-calc((100% - (60px))/2);
+  height: -webkit-calc((100% - (60px))/2);
+  height: calc((100% - (60px)) / 2);
 }
 .middle_right_down {
-  height: -moz-calc((100% - (50px))/2);
-  height: -webkit-calc((100% - (50px))/2);
-  height: calc((100% - (50px)) / 2);
+  height: -moz-calc((100% - (60px))/2);
+  height: -webkit-calc((100% - (60px))/2);
+  height: calc((100% - (60px)) / 2);
 }
 
 div.middle > div {
-  float: left;
   height: 100%;
+  float: left;
 }
 </style>

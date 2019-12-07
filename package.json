@@ -12,7 +12,8 @@
   "dependencies": {
     "@lkmadushan/vue-tuicalendar": "^0.1.6",
     "@syncfusion/ej2-vue-inputs": "^17.3.28",
-    "axios": "^0.18.0",
+    "@toast-ui/vue-image-editor": "^1.0.2",
+    "axios": "^0.18.1",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.1.0",
     "fabric": "^3.5.1",
@@ -21,8 +22,10 @@
     "filepond-plugin-file-validate-type": "^1.2.4",
     "filepond-plugin-image-preview": "^4.5.0",
     "jquery": "^3.4.1",
-    "node-wifi": "^2.0.4",
-    "tui-calendar": "^1.8.0",
+    "node-wifi": "^2.0.12",
+    "tui-calendar": "^1.12.8",
+    "tui-code-snippet": "^2.1.0",
+    "tui-image-editor": "^3.7.1",
     "vue": "^2.5.2",
     "vue-clip": "^1.0.0",
     "vue-fabric": "^0.1.25",
@@ -73,7 +76,7 @@
     "vue-template-compiler": "^2.5.2",
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
-    "webpack-dev-server": "^2.9.7",
+    "webpack-dev-server": "^2.11.5",
     "webpack-merge": "^4.1.0"
   },
   "engines": {

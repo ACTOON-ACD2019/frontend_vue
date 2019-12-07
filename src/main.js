@@ -12,11 +12,6 @@ import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-import 'vue-fabric/dist/vue-fabric.min.css';
-import { Fabric } from 'vue-fabric';
-
-
-Vue.use(Fabric);
 Vue.use(VueClip)
 Vue.use(BootstrapVue)
 Vue.use(VModal);
@@ -24,6 +19,7 @@ Vue.use(require('vue-moment'));
 
 Vue.prototype.$EventBus = new Vue();
 axios.defaults.headers.common['Authorization'] = localStorage.getItem('auth');
+axios.defaults.timeout = 5000;
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 

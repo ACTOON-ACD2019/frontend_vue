@@ -57,12 +57,12 @@ class editor {
 
   // getting the current canvas information
   getImageInfo() {
-
+    console.log("getInfo = ")
+    console.log(this.canvas._objects)
   }
 
   // default callback for addImage method. do not straight call from context
   addImageDefaultCallback(img) {
-    console.log(this)
     
     let tmp = img._element.currentSrc.split('/');
 
