@@ -158,9 +158,14 @@ export default {
         .get(Config.link + "api/cut/" + localStorage.getItem("project") + "/")
         .then(response => {
           console.log("컷 목록 불러오기 성공");
-          console.log(JSON.parse(response.data));
           this.cuts = [];
           var obj = JSON.parse(response.data);
+          console.log(obj);
+          console.log(obj.length);
+          for (let i in obj.length){
+            
+          }
+          /*
           for (let j in obj) {
             for (let i in obj[j]) {
               this.cuts.push({
@@ -170,6 +175,7 @@ export default {
               });
             }
           }
+          */
           this.showcut = true;
         })
         .catch(function(error) {
