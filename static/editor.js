@@ -12,7 +12,7 @@ class editor {
   init(width, height) {
     this.resizeCanvas(width, height);
     this.canvas = new fabric.Canvas(this.canvasId);
-
+    this.canvas.backgroundColor = "#000000";
     console.log('canvas has been initialized with id ' + this.canvasId);
   }
 

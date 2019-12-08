@@ -2,6 +2,7 @@
     <div class="root">
         <top-frame/>
         <center-frame/>
+        <bottom-frame/>
     </div>
 </template>
 
@@ -18,6 +19,7 @@ export default {
 
 <style scoped>
   .root {
+    position:relative;
     margin: 0;
     padding: 0;
     height: 100%;

@@ -2,25 +2,24 @@
   <div class="middle">
     <div class="middle_left">
       <div class="loadcut scrollbar" id="style-1">
-        <div v-if="showcut" class="force-overflow">
+        <div v-if="showcut" class="force-overflow toonframe">
           <div
-            v-for="cut of cuts"
-            :key="cut.idx"
-            @click="addCanvas(cut.url)"
+            v-for="(cut, index) of cuts"
+            :key="index"
+            @click="addCanvas(cut)"
             style="cursor: pointer"
           >
             <div class="image">
-              <img :src="cut.url" width="100" height="100" />
+              <img :src="cut.thumbnail.file" class="thumb-img" />
               <br />
             </div>
-            <div class="fname">{{ cut.type }} {{ cut.sequence }}</div>
           </div>
         </div>
       </div>
     </div>
     <div class="middle_center">
       <div class="middle_canvas">
-        <fab-view />asdfasdf
+        <fab-view />
         <!-- <div v-if="editor == 1">
           <fab-view />
         </div>
@@ -33,15 +32,24 @@
       <div class="middle_right_top">
         <user-layer />
       </div>
+      <hr class="class-1" />
       <div class="middle_right_middle">
         <div class="userhistory">
-          <b-badge>History</b-badge>
-          <b-form-select class="force-overflow loadcut scrollbar" id="style-1" v-model="selected" :options="tasks" :select-size="6"></b-form-select>
-          <b-button size="sm" class="bt-history" @click="deleteTask">Undo</b-button>
+          <h4>
+            <b-badge variant="dark">History</b-badge>
+          </h4>
+          <b-form-select
+            variant="dark"
+            class="force-overflow loadcut scrollbar"
+            id="style-1"
+            v-model="selected"
+            :options="tasks"
+            :select-size="7"
+          ></b-form-select>
+          <b-button variant="dark" size="sm" class="bt-history" @click="deleteTask">Undo</b-button>
         </div>
       </div>
-      <div class="middle_right_bottom">
-      </div>
+      <div class="middle_right_bottom"></div>
     </div>
   </div>
 </template>
@@ -78,13 +86,7 @@ export default {
       project: localStorage.getItem("project"),
       showcut: false,
       editor: 0,
-      cuts: [
-        {
-          url: String,
-          type: String,
-          sequence: 0
-        }
-      ]
+      cuts: []
     };
   },
   created() {
@@ -142,17 +144,6 @@ export default {
       console.log(
         "프로젝트 명 : " + localStorage.getItem("project") + "의 컷 로드 시작"
       );
-      // this.cuts = [];
-      //     this.cuts.push({url:"https://post-phinf.pstatic.net/MjAxODAxMjJfMTU4/MDAxNTE2NTk5MzE0Mzk3.tpo98J5uKOWXI_DKeVshDaXv0A-6fpTvDdbDWX3Uqbkg.dJcyQ8Y4rABIDFt2kbJRsUVjgLmT0Mo9hYVurPAgyfIg.JPEG/6-1.jpg?type=w1200"},
-      //     {url:"https://post-phinf.pstatic.net/MjAxODAxMjJfMTcx/MDAxNTE2NTk5MjU0Njg0.x0xAsVSjoF-vBmiwyQbfUy42yNF1qI4IOWlMGaTq-Ykg.XlcaWo5N9UX9C4Zbe3PMb8_c1FnySQL3oYPGZkO1jgcg.JPEG/1.jpg?type=w1200"},
-      //     {url:"https://post-phinf.pstatic.net/MjAxODAxMjJfMzIg/MDAxNTE2NTk5MjczNjY1.Ss6hMgUgPlt7bq_sqvDswv-_RMqrmpiCpLd3vLev2fQg.gK7M1ap5NCUr7Nv8PGrmd4GVG2mU56M79X3MyhTJQ5kg.JPEG/2.jpg?type=w1200"},
-      //     {url:"https://post-phinf.pstatic.net/MjAxODAxMjJfOSAg/MDAxNTE2NTk5Mjc4NTIw.m1AcAEgafuasLtQTN3BqAHGYS7YsCL1sBVLScrHY6yQg.J8QUzfWq-SwdmQIua17d9TN64XBRQyyUv0Da80-4i9Eg.JPEG/3.jpg?type=w1200"},
-      //     {url:"https://post-phinf.pstatic.net/MjAxODAxMjJfMjYy/MDAxNTE2NTk5MjgzMjU2.goOTFBHTV6o1jLu3fPGlw_Ey3WedV_Kxb3oJHHCKCHgg.AOcrqJTu8AX0tYNE6NHoGF4jq1huYvThU3YmVIwvCTog.JPEG/4.jpg?type=w1200"},
-      //     {url:"https://post-phinf.pstatic.net/MjAxODAxMjJfMjQg/MDAxNTE2NTk5Mjg5NTM1.iMv8cIGzlZfoRzRqnVBu2phY4mWVzFKD-aJAE9ebJZwg.wAnqevBrV49oS_uuooy91-YOQ3ZshL4aY5aAqjhmvPsg.JPEG/5.jpg?type=w1200"},
-      //     {url:"https://post-phinf.pstatic.net/MjAxODAxMjJfNDUg/MDAxNTE2NTk5MjM1NzYx.OS5TeZfmicJ96mjsme6r003Kk-qMZPhzZoRRZIAtjd4g.MS4jAzRFPfd8LRYmX-mlLbo4zywY-Pmsu6ss8o1rlfYg.JPEG/7.jpg?type=w1200"},
-      //     {url:"https://post-phinf.pstatic.net/MjAxODAxMjJfMzAw/MDAxNTE2NTk5MjMxMzI5.QPoiFzAtZXaexijdSx_hcYLKF_lElYFAxWUQRRZq0JMg.XzQD2sW-1xjB2QyNrRHr4QYRQk3klaq4EN33XlxkDTkg.JPEG/8.jpg?type=w1200"},
-      //     )
-      //     this.showcut = true;
 
       this.$http
         .get(Config.link + "api/cut/" + localStorage.getItem("project") + "/")
@@ -161,29 +152,20 @@ export default {
           this.cuts = [];
           var obj = JSON.parse(response.data);
           console.log(obj);
-          console.log(obj.length);
-          for (let i in obj.length){
-            obj.length[i].thumbnail
+          for (let i = 0; i < obj.length; i++) {
+            this.cuts.push(obj[String(i)]);
+            this.cuts[i].thumbnail.file =
+              Config.link + "media/" + this.cuts[i].thumbnail.file;
           }
-          /*
-          for (let j in obj) {
-            for (let i in obj[j]) {
-              this.cuts.push({
-                url: Config.link + "media/" + obj[j][i].file,
-                type: obj[j][i].type,
-                sequence: obj[j][i].sequence
-              });
-            }
-          }
-          */
           this.showcut = true;
         })
-        .catch(function(error) {
+        .catch((error) => {
+          this.cuts = [];
           console.log("컷 로드 실패");
         });
     },
-    addCanvas(url) {
-      this.$EventBus.$emit("addCanvasImage", url);
+    addCanvas(obj) {
+      this.$EventBus.$emit("addCanvasImage", obj);
     },
     showEditor(kind) {
       this.editor = kind;
@@ -195,51 +177,58 @@ export default {
 
 <style scoped>
 .middle {
-  height: calc(100% - 60px);
+  position: relative;
+  height: calc(100% - 80px);
   width: 100%;
   text-align: center;
 }
-
 .middle_left {
-  width: 200px;
+  width: 210px;
   border-right-width: 2px;
   border-right-style: inset;
   border-right-color: rgb(41, 41, 41);
 }
 
+.thumb-img {
+  padding: 10px 10px 10px 10px;
+  width: 120px;
+  height: 120px;
+}
 .middle_center {
-  width: calc(100% - 330px);
-  
+  position: relative;
+  width: calc(100% - 420px);
 }
 
 .middle_canvas {
   width: 100%;
   height: 100%;
-  
 }
 
 .middle_right {
   height: 100%;
-  width: 130px;
+  width: 210px;
   border-left-width: 2px;
   border-left-style: inset;
   border-left-color: rgb(41, 41, 41);
-  background-color: #393949;
+  background-color: gray;
 }
+
 .middle_right_top {
-  height: -moz-calc((100% - (30px))/3);
-  height: -webkit-calc((100% - (30px))/3);
-  height: calc((100% - (30px)) / 3);
+  height: -moz-calc((100%-60px)/2 - 90px);
+  height: -webkit-calc((100%-60px)/2 - 90px);
+  height: calc((100%-60px) / 2 - 90px);
+  transform: translate(0, -12px);
 }
 .middle_right_middle {
-  height: -moz-calc((100% - (30px))/3);
-  height: -webkit-calc((100% - (30px))/3);
-  height: calc((100% - (30px)) / 3);
+  height: -moz-calc((100%-60px)/2 - 90px);
+  height: -webkit-calc((100%-60px)/2 - 90px);
+  height: calc((100%-60px) / 2 - 90px);
+  transform: translate(0, -12px);
 }
 .middle_right_bottom {
-  height: -moz-calc((100% - (60px))/3);
-  height: -webkit-calc((100% - (60px))/3);
-  height: calc((100% - (60px)) / 3);
+  height: auto;
+  height: -webkit-calc(auto);
+  height: calc(auto);
   background-color: black;
 }
 
@@ -247,7 +236,7 @@ export default {
   text-align: left;
 }
 .bt-history {
-  width:100%;
+  width: 100%;
 }
 
 div.middle > div {

@@ -9,13 +9,14 @@
       <main-menu />
     </div>
     <div class="header_right">
-      <div class="info">
+      <div class="info-id">
         {{ user_id }}
-        <br />
-        <b-button size="sm" :pressed.sync="logoutModal">Logout</b-button>
+      </div>
+      <div class="info-btn">
+        <b-button variant="secondary" size="sm" :pressed.sync="logoutModal">Logout</b-button>
       </div>
 
-      <user-inform :visible.sync="logoutModal">
+      <user-inform title="Log Out" :visible.sync="logoutModal">
         <div class="modal_body">
           <div class="label_container">
             <label ref="안내문">
@@ -26,7 +27,7 @@
             <br />
           </div>
           <div class="label_container">
-            <b-button @click="logout" size="lg">Logout</b-button>
+            <b-button variant="secondary" @click="logout" size="lg">Logout</b-button>
           </div>
         </div>
       </user-inform>
@@ -59,34 +60,56 @@ export default {
 
 
 <style scoped>
+
 .header {
-  height: 60px;
+  z-index:auto;
+  position:relative;
+  height: 80px;
   width: 100%;
-  background-color: #393949;
+  background-color: #000000;
   color: white;
 }
 
 div.header > div {
+  position:relative;
   float: left;
   height: 100%;
 }
 
 .header_left {
-  width: 200px;
+  position:relative;
+  width: 210px;
 }
 
 .team_logo img {
-  width: 200px;
+  position:relative;
+  width: 190px;
   height: 60px;
+  margin-top: 10px;
+  margin-left: 10px;
 }
 
 .header_center {
+  position:relative;
   text-align: center;
-  width: calc(100% - 330px);
+  width: calc(100% - 420px);
 }
 
 .header_right {
-  width: 130px;
+  position:fixed;
+  height: 100%;
+  width: 210px;
   text-align: center;
+}
+
+.info-id {
+  float:left;
+  margin-top:25px;
+  margin-left:10px;
+}
+.info-btn {
+  float:right;
+  margin-top:25px;
+  margin-right:10px;
 }
 </style>

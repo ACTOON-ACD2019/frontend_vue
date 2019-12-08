@@ -7,23 +7,31 @@
 <script>
 export default {
   name: 'app',
+  created() {
+    // this.$EventBus.$on("refresh", () => {
+    //   console.log(this);
+    //   this.$forceUpdate();
+    // });
+  },
 }
 </script>
 
 <style>
 
 html, body{
+  position:relative;
   height: 100%;
   width: 100%;
 }
 
 .app {
+  position:relative;
   height: 100%;
   width: 100%;
 }
 
 .scrollbar {
-  background-color: #e4e4e4;
+  background-color: white;
   height: 100%;
   width: 100%;
   overflow-y: scroll;
@@ -47,9 +55,15 @@ html, body{
 }
 
 .my-modal {
-  z-index:5;
+  position:relative;
+  z-index:50;
 }
+
 .tui-image-editor-container .color-picker-control {
   padding: 2px;
+}
+span {
+  margin-left: 1px;
+  transform: translate(0,8px);
 }
 </style>
