@@ -3,7 +3,7 @@
     <b-badge>Layers</b-badge>
     <div>
         <div>
-          <b-form-select class="force-overflow loadcut scrollbar" id="style-1" v-model="selected" :options="layers" :select-size="6s"></b-form-select>
+          <b-form-select class="force-overflow loadcut scrollbar" id="style-1" v-model="selected" :options="layers" :select-size="6"></b-form-select>
         </div>
       </div>
     <b-button class="bt-layer" size="sm" @click="zUp()">▲</b-button>
@@ -70,7 +70,6 @@ export default {
   height: 100%;
   text-align: left;
 }
-
 
 
 .bt-layer {
