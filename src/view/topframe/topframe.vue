@@ -63,6 +63,7 @@ export default {
   height: 60px;
   width: 100%;
   background-color: #393949;
+  color: white;
 }
 
 div.header > div {
@@ -87,8 +88,5 @@ div.header > div {
 .header_right {
   width: 130px;
   text-align: center;
-}
-.header {
-  color: white;
 }
 </style>

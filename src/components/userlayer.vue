@@ -1,9 +1,13 @@
 <template>
   <div class="userlayer">
-    레이어 목록
-    <b-form-select v-model="selected" :options="layers" :select-size="7"></b-form-select>
-    <b-button variant="primary" size="sm" @click="zUp()">▲</b-button>
-    <b-button variant="primary" size="sm" @click="zDown()">▼</b-button>
+    <b-badge>Layers</b-badge>
+    <div>
+        <div>
+          <b-form-select class="force-overflow loadcut scrollbar" id="style-1" v-model="selected" :options="layers" :select-size="6s"></b-form-select>
+        </div>
+      </div>
+    <b-button class="bt-layer" size="sm" @click="zUp()">▲</b-button>
+    <b-button class="bt-layer" size="sm" @click="zDown()">▼</b-button>
   </div>
 </template>
 
@@ -12,12 +16,30 @@ export default {
   data() {
     return {
       selected: "",
-      layers: [],
+      layers: [
+        { value: "1", text: "1", idx:"1"},
+        { value: "1", text: "2", idx:"2" },
+        { value: "1", text: "3", idx:"3" },
+        { value: "1", text: "4", idx:"4" },
+        { value: "1", text: "5", idx:"5" },
+        { value: "1", text: "6", idx:"6" },
+        { value: "1", text: "7", idx:"7" },
+        { value: "1", text: "8", idx:"8" },
+        { value: "1", text: "9", idx:"9" },
+        { value: "1", text: "10", idx:"10" },
+        { value: "1", text: "11", idx:"11" },
+        { value: "1", text: "12", idx:"12" },
+        { value: "1", text: "13", idx:"13" },
+        { value: "1", text: "14", idx:"14" },
+        { value: "1", text: "15", idx:"15" }
+      ],
     };
   },
   created() {
     this.$EventBus.$on("refreshLayer", objects => {
-      this.layers = [];
+      this.layers = [
+        
+      ];
 
       // for (let i in objects) {
       //   console.log(i);
@@ -46,5 +68,13 @@ export default {
 <style scoped>
 .userlayer {
   height: 100%;
+  text-align: left;
+}
+
+
+
+.bt-layer {
+  float:left;
+  width:50%;
 }
 </style>

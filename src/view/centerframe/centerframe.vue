@@ -30,15 +30,17 @@
       </div>
     </div>
     <div class="middle_right">
-      <div class="middle_right_middle">
+      <div class="middle_right_top">
         <user-layer />
       </div>
-      <div class="middle_right_down">
+      <div class="middle_right_middle">
         <div class="userhistory">
-          작업 기록
-          <b-form-select v-model="selected" :options="tasks" :select-size="9"></b-form-select>
-          <b-button size="sm" variant="info" @click="deleteTask">최근 기록 되돌리기</b-button>
+          <b-badge>History</b-badge>
+          <b-form-select class="force-overflow loadcut scrollbar" id="style-1" v-model="selected" :options="tasks" :select-size="6"></b-form-select>
+          <b-button size="sm" class="bt-history" @click="deleteTask">Undo</b-button>
         </div>
+      </div>
+      <div class="middle_right_bottom">
       </div>
     </div>
   </div>
@@ -156,6 +158,7 @@ export default {
         .get(Config.link + "api/cut/" + localStorage.getItem("project") + "/")
         .then(response => {
           console.log("컷 목록 불러오기 성공");
+          console.log(JSON.parse(response.data));
           this.cuts = [];
           var obj = JSON.parse(response.data);
           for (let j in obj) {
@@ -198,30 +201,6 @@ export default {
   border-right-color: rgb(41, 41, 41);
 }
 
-.scrollbar {
-  background-color: #e4e4e4;
-  height: 100%;
-  width: 100%;
-  overflow-y: scroll;
-}
-
-#style-1::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-  background-color: #f5f5f5;
-}
-
-#style-1::-webkit-scrollbar {
-  width: 5px;
-  background-color: #f5f5f5;
-}
-
-#style-1::-webkit-scrollbar-thumb {
-  border-radius: 5px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: #555;
-}
-
 .middle_center {
   width: calc(100% - 330px);
   
@@ -241,15 +220,28 @@ export default {
   border-left-color: rgb(41, 41, 41);
   background-color: #393949;
 }
-.middle_right_middle {
-  height: -moz-calc((100% - (60px))/2);
-  height: -webkit-calc((100% - (60px))/2);
-  height: calc((100% - (60px)) / 2);
+.middle_right_top {
+  height: -moz-calc((100% - (30px))/3);
+  height: -webkit-calc((100% - (30px))/3);
+  height: calc((100% - (30px)) / 3);
 }
-.middle_right_down {
-  height: -moz-calc((100% - (60px))/2);
-  height: -webkit-calc((100% - (60px))/2);
-  height: calc((100% - (60px)) / 2);
+.middle_right_middle {
+  height: -moz-calc((100% - (30px))/3);
+  height: -webkit-calc((100% - (30px))/3);
+  height: calc((100% - (30px)) / 3);
+}
+.middle_right_bottom {
+  height: -moz-calc((100% - (60px))/3);
+  height: -webkit-calc((100% - (60px))/3);
+  height: calc((100% - (60px)) / 3);
+  background-color: black;
+}
+
+.userhistory {
+  text-align: left;
+}
+.bt-history {
+  width:100%;
 }
 
 div.middle > div {

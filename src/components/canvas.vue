@@ -23,7 +23,7 @@ export default {
     this.$EventBus.$on("addCanvasImage", url => {
       console.log("이미지 생성 url = ", url);
       this.canvas.addImage(url, null);
-
+      console.log(this.canvas.canvas._objects);
 
       
       // for (let i in (this.canvas.canvas._objects.length+1)){
