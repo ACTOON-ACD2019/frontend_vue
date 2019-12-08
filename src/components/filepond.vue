@@ -16,8 +16,8 @@
 <script>
 import vueFilePond from "vue-filepond";
 import Config from "../../config/config";
-import "../../dist/filepond.min.css";
-import "../../dist/filepond-plugin-image-preview.css";
+// import "../../dist/filepond.min.css";
+// import "../../dist/filepond-plugin-image-preview.css";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 

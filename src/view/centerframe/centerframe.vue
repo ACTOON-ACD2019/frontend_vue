@@ -163,7 +163,7 @@ export default {
           console.log(obj);
           console.log(obj.length);
           for (let i in obj.length){
-            
+            obj.length[i].thumbnail
           }
           /*
           for (let j in obj) {
