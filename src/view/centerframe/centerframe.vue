@@ -31,12 +31,6 @@
     <div class="middle_center">
       <div class="middle_canvas">
         <fab-view />
-        <!-- <div v-if="editor == 1">
-          <fab-view />
-        </div>
-        <div v-else-if="editor == 2">
-          <tui-editor />
-        </div>-->
       </div>
     </div>
     <div class="middle_right">
@@ -62,6 +56,14 @@
       </div>
       <div class="middle_right_bottom"></div>
     </div>
+
+    <image-editor :visible.sync="editorModal">
+      <div class="modal_body">
+        <div class="label_container">
+          <tui-editor :src="src" />
+        </div>
+      </div>
+    </image-editor>
   </div>
 </template>
 
@@ -70,10 +72,13 @@ import UserLayer from "../../components/userlayer";
 import FabView from "../../components/canvas";
 import TuiEditor from "../../components/tuieditor";
 import Config from "../../../config/config";
+import ImageEditor from "../../components/editormodal";
 
 export default {
   data() {
     return {
+      src: "",
+      editorModal: false,
       selected: "",
       tasks_size: 0,
       tasks: [
@@ -103,10 +108,18 @@ export default {
   created() {
     this.$EventBus.$on("loadCut", () => {
       this.$EventBus.$emit("refreshLayer");
+      this.$EventBus.$emit("refreshCanvas");
       this.getCutList();
     });
     this.$EventBus.$on("showEditor", kind => {
       this.showEditor(kind);
+    });
+    this.$EventBus.$on("imageEditorOpen", src => {
+      this.src = src;
+      this.editorModal = true;
+    });
+    this.$EventBus.$on("imageEditorClose", () => {
+      this.editorModal = false;
     });
     /*
     this.$EventBus.$on("loadtask", () => {
@@ -156,7 +169,6 @@ export default {
       console.log(
         "프로젝트 명 : " + localStorage.getItem("project") + "의 컷 로드 시작"
       );
-
       this.$http
         .get(Config.link + "api/cut/" + localStorage.getItem("project") + "/")
         .then(response => {
@@ -179,11 +191,8 @@ export default {
     addCanvas(obj) {
       this.$EventBus.$emit("addCanvasImage", obj);
     },
-    showEditor(kind) {
-      this.editor = kind;
-    }
   },
-  components: { UserLayer, FabView, TuiEditor }
+  components: { UserLayer, FabView, TuiEditor, ImageEditor }
 };
 </script>
 

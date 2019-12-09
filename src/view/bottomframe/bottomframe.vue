@@ -10,9 +10,17 @@
                 <img class="btn-effect earth" src="../../assets/earth.png" @click="showEarthquake" />
                 <img class="btn-effect flash" src="../../assets/flash.png" @click="showFlash" />
                 <img class="btn-effect rotate" src="../../assets/spin.png" @click="showRotate" />
-                <img class="btn-effect frotate" src="../../assets/rotate.png" @click="showFullrotate" />
+                <img
+                  class="btn-effect frotate"
+                  src="../../assets/rotate.png"
+                  @click="showFullrotate"
+                />
                 <img class="btn-effect shake" src="../../assets/shake.png" @click="showShake" />
-                <img class="btn-effect translate" src="../../assets/shift.png" @click="showTransition" />
+                <img
+                  class="btn-effect translate"
+                  src="../../assets/shift.png"
+                  @click="showTransition"
+                />
               </b-tab>
               <b-tab title="Timeline">
                 <p>I'm the second tab</p>
@@ -23,158 +31,178 @@
       </ul>
     </nav>
 
-
-    <movie-effect title="진동" :visible.sync="earthquake.visible">
+    <movie-effect title="EarthQuake" :visible.sync="earthquake.visible">
       <div class="modal_body">
         <div class="label_container">
-          <label ref="설명">진동 효과는 강도와 속도의 값으로 시간(초)만큼 흔들리는 효과입니다. (지진)</label>
+          <label
+            ref="설명"
+          >The earthquake is the shake effect depending on times, strength, and, speed.</label>
           <br />
           <br />
         </div>
         <div class="body_container">
-          강도 : {{ earthquake.power }}
+          Strength : {{ earthquake.power }}
           <br />
           <b-form-input id="range-1" v-model="earthquake.power" type="range" min="0" max="40"></b-form-input>
+          <br />
         </div>
         <div class="body_container">
-          속도 : {{ earthquake.speed }}
+          Speed : {{ earthquake.speed }}
           <br />
           <b-form-input id="range-1" v-model="earthquake.speed" type="range" min="0" max="5"></b-form-input>
+          <br />
         </div>
         <div class="body_container">
-          시간 : {{ earthquake.time }}
+          Time : {{ earthquake.time }}
           <br />
           <b-form-input id="range-1" v-model="earthquake.time" type="range" min="0" max="10"></b-form-input>
+          <br />
         </div>
+        <br />
         <div class="label_container">
-          <b-button squared>확인</b-button>
-          <b-button squared variant="danger" @click="showEarthquake">취소</b-button>
+          <b-button squared>Confirm</b-button>
+          <b-button squared variant="danger" @click="showEarthquake">Exit</b-button>
         </div>
       </div>
     </movie-effect>
 
-    <movie-effect title="반짝이기" :visible.sync="flash.visible">
+    <movie-effect title="Flash" :visible.sync="flash.visible">
       <div class="modal_body">
         <div class="label_container">
-          <label ref="설명">반짝이기 시간(초)만큼 반짝이는 효과입니다.</label>
+          <label ref="설명">The flash is an effect which twinkles.</label>
           <br />
           <br />
         </div>
         <div class="body_container">
-          시간 : {{ flash.time }}
+          Time : {{ flash.time }}
           <br />
           <b-form-input id="range-1" v-model="flash.time" type="range" min="0" max="10"></b-form-input>
+          <br />
         </div>
+        <br />
         <div class="label_container">
-          <b-button squared>확인</b-button>
-          <b-button squared variant="danger" @click="showFlash">취소</b-button>
+          <b-button squared>Confirm</b-button>
+          <b-button squared variant="danger" @click="showFlash">Exit</b-button>
         </div>
       </div>
     </movie-effect>
 
-    <movie-effect title="돌리기" :visible.sync="rotate.visible">
+    <movie-effect title="Spin" :visible.sync="rotate.visible">
       <div class="modal_body">
         <div class="label_container">
-          <label ref="설명">돌리기 효과는 시계(반시계)방향으로 속도만큼 각도까지 회전하는 효과입니다.</label>
+          <label ref="설명">The Spin is an effect depending on clockwise, speed, and, angle.</label>
           <br />
           <br />
         </div>
         <div class="body_container">
-          각도 : {{ rotate.degree }}
+          Angle : {{ rotate.degree }}
           <br />
           <b-form-input id="range-1" v-model="rotate.degree" type="range" min="0" max="360"></b-form-input>
+          <br />
         </div>
         <div class="body_container">
-          방향
+          clockwise
           <br />
           <b-form-radio-group v-model="rotate.direction" :options="options" name="radio-inline"></b-form-radio-group>
         </div>
         <div class="body_container">
-          속도 : {{ rotate.speed }}
+          Speed : {{ rotate.speed }}
           <br />
           <b-form-input id="range-1" v-model="rotate.speed" type="range" min="0" max="10"></b-form-input>
+          <br />
         </div>
+        <br />
         <div class="label_container">
-          <b-button squared>확인</b-button>
-          <b-button squared variant="danger" @click="showRotate">취소</b-button>
+          <b-button squared>Confirm</b-button>
+          <b-button squared variant="danger" @click="showRotate">Exit</b-button>
         </div>
       </div>
     </movie-effect>
 
-    <movie-effect title="회전하기" :visible.sync="fullrotate.visible">
+    <movie-effect title="Rotate" :visible.sync="fullrotate.visible">
       <div class="modal_body">
         <div class="label_container">
-          <label ref="설명">회전하기 효과는 시계(반시계)방향으로 횟수 만큼 회전하는 효과입니다.</label>
+          <label ref="설명">The Rotate is an effect depending on clockwise, count.</label>
           <br />
           <br />
         </div>
         <div class="body_container">
-          방향
+          Clockwise
           <br />
           <b-form-radio-group v-model="fullrotate.direction" :options="options" name="radio-inline"></b-form-radio-group>
+          <br />
         </div>
         <div class="body_container">
-          횟수 : {{ fullrotate.count }}
+          Count : {{ fullrotate.count }}
           <br />
           <b-form-input id="range-1" v-model="fullrotate.count" type="range" min="0" max="10"></b-form-input>
+          <br />
         </div>
+        <br />
         <div class="label_container">
-          <b-button squared>확인</b-button>
-          <b-button squared variant="danger" @click="showFullrotate">취소</b-button>
+          <b-button squared>Confirm</b-button>
+          <b-button squared variant="danger" @click="showFullrotate">Exit</b-button>
         </div>
       </div>
     </movie-effect>
 
-    <movie-effect title="흔들기" :visible.sync="shake.visible">
+    <movie-effect title="Shake" :visible.sync="shake.visible">
       <div class="modal_body">
         <div class="label_container">
-          <label ref="설명">흔들기 효과는 각도만큼 속도로 횟수만큼 흔드는 효과입니다.</label>
+          <label ref="설명">The Shake is an effect depending on degree, speed, and, count</label>
           <br />
           <br />
         </div>
         <div class="body_container">
-          각도 : {{ shake.degree }}
+          Degree : {{ shake.degree }}
           <br />
           <b-form-input id="range-1" v-model="shake.degree" type="range" min="0" max="45"></b-form-input>
+          <br />
         </div>
         <div class="body_container">
-          속도 : {{ shake.speed }}
+          Speed : {{ shake.speed }}
           <br />
           <b-form-input id="range-1" v-model="shake.speed" type="range" min="0" max="10"></b-form-input>
+          <br />
         </div>
         <div class="body_container">
-          횟수 : {{ shake.count }}
+          Count : {{ shake.count }}
           <br />
           <b-form-input id="range-1" v-model="shake.count" type="range" min="0" max="5"></b-form-input>
+          <br />
         </div>
+        <br />
         <div class="label_container">
-          <b-button squared>확인</b-button>
-          <b-button squared variant="danger" @click="showShake">취소</b-button>
+          <b-button squared>Confirm</b-button>
+          <b-button squared variant="danger" @click="showShake">Exit</b-button>
         </div>
       </div>
     </movie-effect>
 
-    <movie-effect title="이동하기" :visible.sync="transition.visible">
+    <movie-effect title="Shift" :visible.sync="transition.visible">
       <div class="modal_body">
         <div class="label_container">
-          <label ref="설명">이동하기 효과는 목표 좌표까지 속도로 이동하는 효과입니다.</label>
+          <label ref="설명">The move effect is the effect of moving at speed to the target coordinate.</label>
           <br />
           <br />
         </div>
         <div class="body_container">
-          속도 : {{ transition.speed }}
+          Speed : {{ transition.speed }}
           <br />
           <b-form-input id="range-1" v-model="transition.speed" type="range" min="0" max="10"></b-form-input>
+          <br />
         </div>
         <div class="body_container">
-          좌표
+          Coordinate
           <br />
           x<b-form-input type="number" v-model="transition.xdes"></b-form-input>
           y<b-form-input type="number" v-model="transition.ydes"></b-form-input>
+          <br />
         </div>
+        <br />
         <div class="label_container">
-          <b-button squared>확인</b-button>
-          <b-button squared variant="danger" @click="showTransition">취소</b-button>
+          <b-button squared>Confirm</b-button>
+          <b-button squared variant="danger" @click="showTransition">Exit</b-button>
         </div>
       </div>
     </movie-effect>
@@ -188,8 +216,8 @@ export default {
     return {
       selected: null,
       options: [
-        { text: "시계방향", value: false },
-        { text: "반시계방향", value: true }
+        { text: "Clockwise", value: false },
+        { text: "CounterClockwise", value: true }
       ],
       earthquake: {
         visible: false,
@@ -212,17 +240,17 @@ export default {
         direction: false,
         count: 0
       },
-      shake:{
+      shake: {
         visible: false,
-        degree:0,
-        speed:0,
-        count:0
+        degree: 0,
+        speed: 0,
+        count: 0
       },
-      transition:{
+      transition: {
         visible: false,
-        speed:0,
-        xdes:0,
-        ydes:0
+        speed: 0,
+        xdes: 0,
+        ydes: 0
       }
     };
   },
@@ -289,7 +317,7 @@ export default {
   font-family: "roboto";
 }
 .nav-item > a {
-  color:white;
+  color: white;
 }
 
 .bot-menu-effect {

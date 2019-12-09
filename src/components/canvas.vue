@@ -42,25 +42,24 @@ export default {
         height: this.height
       }
     );
-
-    // this.canvas.on("mouse:down", target => {
-    //   // console.log(target);
-    //   // var activeObj = this.canvas.getActiveObject();
-    //   // console.log(this.canvas.getObjects().indexOf(activeObj));
-    // });
-    fabric.util.addListener(canvas.upperCanvasEl, "click", (e) => {
+    
+    fabric.util.addListener(canvas.upperCanvasEl, "click", e => {
       let objType = canvas.findTarget(e).type;
-      console.log(objType);
       if (objType == "image") {
-        this.$EventBus.$emit("selectLayer", canvas.getObjects().indexOf(canvas.findTarget(e)));
+        this.$EventBus.$emit(
+          "selectLayer",
+          canvas.getObjects().indexOf(canvas.findTarget(e))
+        );
       }
     });
 
-    fabric.util.addListener(canvas.upperCanvasEl, "dblclick", function(e) {
+    fabric.util.addListener(canvas.upperCanvasEl, "dblclick", e => {
       let objType = canvas.findTarget(e).type;
-      console.log(objType);
       if (objType == "image") {
-        alert("이미지");
+        this.$EventBus.$emit(
+          "imageEditorOpen",
+          canvas.findTarget(e)._element.src
+        );
       }
     });
 
@@ -68,6 +67,15 @@ export default {
   },
   created() {
     this.$EventBus.$on("resetCanvas", () => {});
+
+    this.$EventBus.$on("selectObject", index => {
+      this.canvas.setActiveObject(this.canvas.item(index));
+    });
+
+    this.$EventBus.$on("moveObject", () => {
+      this.canvas.setActiveObject(this.canvas.item(index));
+    });
+
     this.$EventBus.$on("addCanvasImage", obj => {
       console.log("이미지 생성 시작");
       fabric.Image.fromURL(
@@ -90,11 +98,7 @@ export default {
       }
     });
   },
-  methods: {
-    load() {
-      console.log("dd");
-    }
-  }
+  methods: {}
 };
 </script>
 

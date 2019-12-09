@@ -15,7 +15,12 @@
     </div>
     <div v-else class="menu2">
       <div class="menu2_thum">
-        <project-thumnail :project="selected.project_name" :src="selected.src" :date="selected.created_at" :desc="selected.desc"></project-thumnail>
+        <project-thumnail
+          :project="selected.project_name"
+          :src="selected.src"
+          :date="selected.created_at"
+          :desc="selected.desc"
+        ></project-thumnail>
       </div>
       <div class="menu2_menu">
         <b-dropdown
@@ -135,7 +140,7 @@ export default {
         project_name: "",
         desc: "",
         created_at: "",
-        src: "",
+        src: ""
       },
       isLoaded: true
     };
@@ -186,8 +191,8 @@ export default {
           this.selected.project_name = response.data.name;
           this.selected.desc = response.data.description;
           this.selected.created_at = response.data.created_at;
-          this.showNewModal();
           this.$EventBus.$emit("loadCut");
+          this.showNewModal();
         })
         .catch(error => {
           if (error.response.status == 400) {
@@ -214,7 +219,7 @@ export default {
                 response.data[i].name +
                 " / Description : " +
                 response.data[i].description +
-                " / CreateAt : " + 
+                " / CreateAt : " +
                 response.data[i].created_at
             });
             this.projects_cnt++;
@@ -263,10 +268,13 @@ export default {
     patchProject() {
       console.log("프로젝트 수정 시작");
       this.$http
-        .patch(Config.link + "api/project/" + this.selected.project_name + "/", {
-          name: this.patchName,
-          description: this.patchDes
-        })
+        .patch(
+          Config.link + "api/project/" + this.selected.project_name + "/",
+          {
+            name: this.patchName,
+            description: this.patchDes
+          }
+        )
         .then(response => {
           console.log("프로젝트 수정 성공");
           alert("프로젝트가 수정되었습니다.");

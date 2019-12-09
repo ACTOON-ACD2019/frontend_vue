@@ -5,8 +5,10 @@
 </template>
 
 <script>
+import jQuery from "jquery";
 export default {
   name: 'app',
+  
 }
 </script>
 
@@ -59,5 +61,15 @@ html, body{
 span {
   margin-left: 1px;
   transform: translate(0,8px);
+}
+
+.tui-image-editor-header-logo {
+  display:none;
+}
+.tui-image-editor-header-buttons > button {
+  display:none;
+}
+.tui-image-editor-header-buttons > .tui-image-editor-download-btn{
+  display:block;
 }
 </style>

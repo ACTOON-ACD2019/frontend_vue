@@ -1,19 +1,16 @@
 <template>
-  <div class="imageEditorApp">
-
-    <tui-image-editor
-      ref="tuiImageEditor"
-      :include-ui="useDefaultUI"
-      :options="options"
-      @addText="onAddText"
-      @objectMoved="onObjectMoved"
-    ></tui-image-editor>
-  </div>
+  <tui-image-editor
+    ref="tuiImageEditor"
+    :include-ui="useDefaultUI"
+    :options="options"
+    @addText="onAddText"
+    @objectMoved="onObjectMoved"
+  ></tui-image-editor>
 </template>
 
 <script>
 import "tui-color-picker/dist/tui-color-picker.css";
-import { ImageEditor } from '@toast-ui/vue-image-editor';
+import { ImageEditor } from "@toast-ui/vue-image-editor";
 
 const icona = require("tui-image-editor/dist/svg/icon-a.svg");
 const iconb = require("tui-image-editor/dist/svg/icon-b.svg");
@@ -30,11 +27,19 @@ export default {
   components: {
     "tui-image-editor": ImageEditor
   },
+  props: {
+    src: String
+  },
   data() {
     return {
+      url: "",
       useDefaultUI: true,
       options: {
         includeUI: {
+          loadImage: {
+            path: this.src,
+            name: "editImage"
+          },
           theme: blackTheme,
           uiSize: {
             width: "100%",
@@ -49,7 +54,34 @@ export default {
       }
     };
   },
+  mounted() {
+    $(".tui-image-editor-download-btn").replaceWith(
+      '<button class="tui-image-editor-download-btn">Save</button>'
+    );
+  },
+  created() {
+    document.addEventListener("click", evt => {
+      if (evt.target.className == "tui-image-editor-download-btn") {
+        this.url = this.$refs.tuiImageEditor.invoke("toDataURL");
+        var file = this.dataURLtoFile(this.url, "editimage");
+        console.log(file);
+        alert("이미지가 수정되었습니다.");
+        this.$EventBus.$emit("imageEditorClose");
+      }
+    });
+  },
   methods: {
+    dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    },
     onAddText(res) {
       console.group("addText");
       console.log("Client Position : ", res.clientPosition);
@@ -65,7 +97,6 @@ export default {
   }
 };
 </script>
-<style>
 
-
+<style scoped>
 </style>
