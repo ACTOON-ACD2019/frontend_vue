@@ -57,13 +57,21 @@ class editor {
 
   // getting the current canvas information
   getImageInfo() {
-    console.log("getInfo = ")
-    console.log(this.canvas._objects)
+    // console.log("getInfo = ")
+    // console.log(this.canvas._objects)
+    // this.canvas.on({
+    //   'mouse:move': function (e) {
+    //     //hook up dynamic zorder
+    //     if (!e.target) return;
+    //     console.log("움직임");
+    //   },
+    // });
   }
+
 
   // default callback for addImage method. do not straight call from context
   addImageDefaultCallback(img) {
-    
+
     let tmp = img._element.currentSrc.split('/');
 
     img.set({

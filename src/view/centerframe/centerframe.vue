@@ -8,10 +8,21 @@
             :key="index"
             @click="addCanvas(cut)"
             style="cursor: pointer"
+            draggable="true"
           >
-            <div class="image">
-              <img :src="cut.thumbnail.file" class="thumb-img" />
-              <br />
+            <div v-if="index % 2 == 0">
+              왼쪽
+              <div class="image">
+                <img :src="cut.thumbnail.file" class="thumb-img" />
+                <br />
+              </div>
+            </div>
+            <div v-else>
+              오른쪽
+              <div class="image">
+                <img :src="cut.thumbnail.file" class="thumb-img" />
+                <br />
+              </div>
             </div>
           </div>
         </div>
@@ -91,6 +102,7 @@ export default {
   },
   created() {
     this.$EventBus.$on("loadCut", () => {
+      this.$EventBus.$emit("refreshLayer");
       this.getCutList();
     });
     this.$EventBus.$on("showEditor", kind => {
@@ -159,7 +171,7 @@ export default {
           }
           this.showcut = true;
         })
-        .catch((error) => {
+        .catch(error => {
           this.cuts = [];
           console.log("컷 로드 실패");
         });

@@ -26,17 +26,35 @@ export default {
     };
   },
   created() {
-    this.$EventBus.$on("refreshLayer", objects => {
+    this.$EventBus.$on("refreshLayer",() => {
+      this.layers = [];
+
+    });
+    this.$EventBus.$on("addLayer", (objects,index) => {
       if (objects.type == "BU") {
         this.layers.push({
           value: objects,
-          text: "컷 " + objects.sequence + " : " + objects.type,
+          idx: index,
+          sequence: objects.sequence,
+          type: objects.type,
+          text: index + " : 컷 " + objects.sequence + " : " + objects.type,
         });
       } else {
         this.layers.push({
           value: objects,
-          text: "컷 " + objects.sequence + " : " + objects.type + objects.sequence,
+          idx: index,
+          sequence: objects.sequence,
+          type: objects.type,
+          text: index + " : 컷 " + objects.sequence + " : " + objects.type + objects.sequence,
         });
+      }
+    });
+    this.$EventBus.$on("selectLayer",(index) => {
+      for (let i in this.layers){
+        if(this.layers[i].idx == index){
+          this.selected = this.layers[i].value;
+          console.log("찾음!");
+        }
       }
     });
   },

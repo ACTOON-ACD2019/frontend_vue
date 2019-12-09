@@ -7,12 +7,6 @@
 <script>
 export default {
   name: 'app',
-  created() {
-    // this.$EventBus.$on("refresh", () => {
-    //   console.log(this);
-    //   this.$forceUpdate();
-    // });
-  },
 }
 </script>
 

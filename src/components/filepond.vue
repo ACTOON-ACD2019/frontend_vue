@@ -1,7 +1,9 @@
 <template>
   <div id="test">
     <div v-if="!optseleted">
-      <span style="font-weight:bold">Please Select Image Option</span><br /><br />
+      <span style="font-weight:bold">Please Select Image Option</span>
+      <br />
+      <br />
       <span style="font-weight:bold">Comic Genre</span>
       <b-form-group>
         <b-form-radio-group
@@ -119,8 +121,9 @@ export default {
               load(response.data);
               this.$EventBus.$emit("loadCut");
             })
-            .catch(thrown => {
-              console.log("Request cancelled", thrown.message);
+            .catch(error => {
+              alert("시간 초과가 발생했습니다. 서버의 상태를 확인해주세요.");
+              console.log("Request cancelled", error.message);
             });
         }
       },
@@ -139,7 +142,11 @@ export default {
   },
   computed: {
     state() {
-      return Boolean(this.selectedOpt.genre && this.selectedOpt.bgcolor && this.selectedOpt.language);
+      return Boolean(
+        this.selectedOpt.genre &&
+          this.selectedOpt.bgcolor &&
+          this.selectedOpt.language
+      );
     }
   },
   components: {
