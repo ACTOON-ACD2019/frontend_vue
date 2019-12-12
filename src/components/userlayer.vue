@@ -13,8 +13,8 @@
       @change="selectObject(selected.idx)"
     ></b-form-select>
 
-    <b-button variant="dark" class="bt-layer" size="sm" @click="zUp()">▲</b-button>
-    <b-button variant="dark" class="bt-layer" size="sm" @click="zDown()">▼</b-button>
+    <b-button variant="dark" class="bt-layer" size="sm" @click="zUp(selected)">▲</b-button>
+    <b-button variant="dark" class="bt-layer" size="sm" @click="zDown(selected)">▼</b-button>
   </div>
 </template>
 
@@ -28,7 +28,7 @@ export default {
   },
   created() {
     this.$EventBus.$on("refreshLayer", () => {
-      this.layers = [];
+      this.refresh();
     });
 
     this.$EventBus.$on("addLayer", (objects, index) => {
@@ -38,9 +38,16 @@ export default {
             objects,
             idx: index,
             sequence: objects.sequence,
+            sub_sequence: objects.sub_sequence,
             type: objects.type
           },
-          text: index + " : Cut " + objects.sequence + " : " + objects.type
+          text:
+            index +
+            " : Cut " +
+            objects.sequence +
+            " : " +
+            objects.type +
+            objects.sub_sequence
         });
       } else {
         this.layers.push({
@@ -60,6 +67,7 @@ export default {
         });
       }
     });
+
     this.$EventBus.$on("selectLayer", index => {
       for (let i in this.layers) {
         if (this.layers[i].value.idx == index) {
@@ -67,14 +75,24 @@ export default {
         }
       }
     });
+    this.$EventBus.$on("resetLayer", () => {
+      this.layers = [];
+    });
   },
   methods: {
+    refresh() {
+      for (let i in this.layers) {
+        console.log(this.layers[i].value.idx);
+      }
+    },
     selectObject(idx) {
       this.$EventBus.$emit("selectObject", idx);
     },
-    zUp() {},
-    zDown() {
-      console.log("레이어 우선순위 변경");
+    zUp(selected) {
+      this.$EventBus.$emit("zindexUp", selected.idx);
+    },
+    zDown(selected) {
+      this.$EventBus.$emit("zindexDown", selected.idx);
     }
   }
 };

@@ -34,8 +34,7 @@
           <b-dropdown-item @click="showNewModal">New Project</b-dropdown-item>
           <b-dropdown-item @click="showLoadModalOpen">Project Load</b-dropdown-item>
           <b-dropdown-item @click="showUploadModal">Add Image</b-dropdown-item>
-          <b-dropdown-item @click="()=>{this.$EventBus.$emit('showEditor',1);}">Video Editor</b-dropdown-item>
-          <b-dropdown-item @click="()=>{this.$EventBus.$emit('showEditor',2);}">Image Editor</b-dropdown-item>
+          <b-dropdown-item @click="saveVideo()">Save</b-dropdown-item>
         </b-dropdown>
       </div>
     </div>
@@ -57,8 +56,25 @@
         <br />
         <br />
         <div class="label_container">
-          <b-button squared variant="dark" @click="newProject">Create</b-button>
-          <b-button squared variant="danger" @click="showNewModal">Exit</b-button>
+          <b-form-group label="Select or Input the canvas size">
+            <b-form-radio-group
+              class="radio-group-1"
+              v-model="canvasSelected"
+              :options="coptions"
+              name="radio-options"
+            ></b-form-radio-group>
+          </b-form-group>
+          <br />
+          <div v-if="canvasSelected == 1">
+            width
+            <b-form-input v-model="custom_width" placeholder="Enter Canvas width" type="number"></b-form-input>
+            <br />height
+            <b-form-input v-model="custom_height" placeholder="Enter Canvas height" type="number"></b-form-input>
+          </div>
+          <br />
+          <br />
+          <b-button squared @click="newProject()">Confirm</b-button>
+          <b-button squared variant="danger" @click="showNewModal()">Exit</b-button>
         </div>
       </div>
     </project-inform>
@@ -142,7 +158,21 @@ export default {
         created_at: "",
         src: ""
       },
-      isLoaded: true
+      isLoaded: true,
+
+      canvasSelected: "",
+      custom_width: 0,
+      custom_height: 0,
+      canv_width: 0,
+      canv_height: 0,
+      coptions: [
+        { text: "480 x 320", value: { width: 480, height: 320 } },
+        { text: "640 x 480", value: { width: 640, height: 480 } },
+        { text: "800 x 600", value: { width: 800, height: 600 } },
+        { text: "1024 x 768", value: { width: 1024, height: 768 } },
+        { text: "1280 x 800", value: { width: 1280, height: 800 } },
+        { text: "Customize", value: 1 }
+      ]
     };
   },
   watch: {
@@ -179,10 +209,19 @@ export default {
     },
     newProject() {
       console.log("프로젝트 생성 시작");
+      if (this.canvasSelected == 1) {
+        this.canv_width = this.custom_width;
+        this.canv_height = this.custom_height;
+      } else {
+        this.canv_width = this.canvasSelected.width;
+        this.canv_height = this.canvasSelected.height;
+      }
       this.$http
         .put(Config.link + "api/project/", {
           name: this.name,
-          description: this.description
+          description: this.description,
+          resolution_width: this.canv_width,
+          resolution_height: this.canv_height
         })
         .then(response => {
           localStorage.setItem("project", this.name);
@@ -191,6 +230,7 @@ export default {
           this.selected.project_name = response.data.name;
           this.selected.desc = response.data.description;
           this.selected.created_at = response.data.created_at;
+          this.$EventBus.$emit("editCanvas", this.canv_width, this.canv_height);
           this.$EventBus.$emit("loadCut");
           this.showNewModal();
         })
@@ -242,6 +282,9 @@ export default {
           this.selected.project_name = response.data.name;
           this.selected.desc = response.data.description;
           this.selected.created_at = response.data.created_at;
+          this.canv_width = response.data.resolution_width;
+          this.canv_height = response.data.resolution_height;
+          this.$EventBus.$emit("editCanvas", this.canv_width, this.canv_height);
           this.$EventBus.$emit("loadCut");
           this.showLoadModalClose();
         })
@@ -282,8 +325,11 @@ export default {
           this.showPatchModal();
         })
         .catch(error => {
-          console.log("프로젝스 수정 실패");
+          console.log("프로젝트 수정 실패");
         });
+    },
+    saveVideo(){
+      this.$EventBus.$emit("saving");
     }
   },
   components: { ProjectInform, FileUpload, ProjectThumnail }

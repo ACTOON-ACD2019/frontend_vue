@@ -55,7 +55,7 @@
           <img :src="previewURL" class="preview-image" />
         </div>
         <div class="label_container">
-          <b-button variant="secondary" @click="showPreview()" size="lg">Confirm</b-button>
+          <b-button variant="secondary" @click="preChk()" size="lg">Confirm</b-button>
         </div>
       </div>
     </preview-image>
@@ -133,6 +133,10 @@ export default {
     };
   },
   methods: {
+    preChk(){
+      this.optseleted = !this.optseleted;
+      this.$EventBus.$emit("filepond");
+    },
     showPreview() {
       this.previewImage = !this.previewImage;
     },

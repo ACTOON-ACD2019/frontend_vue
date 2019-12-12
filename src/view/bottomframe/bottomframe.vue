@@ -3,7 +3,7 @@
     <nav class="nav__cont">
       <ul class="nav">
         <li class="nav__items">
-          <h3>Effect / Timeline ▲</h3>
+          <h4>▲</h4>
           <div class="bot-menu-effect">
             <b-tabs content-class="mt-3" fill variant="secondary">
               <b-tab title="Effect" active>
@@ -23,7 +23,7 @@
                 />
               </b-tab>
               <b-tab title="Timeline">
-                <p>I'm the second tab</p>
+                
               </b-tab>
             </b-tabs>
           </div>
@@ -60,7 +60,7 @@
         </div>
         <br />
         <div class="label_container">
-          <b-button squared>Confirm</b-button>
+          <b-button squared @click="taskEarth()">Confirm</b-button>
           <b-button squared variant="danger" @click="showEarthquake">Exit</b-button>
         </div>
       </div>
@@ -194,9 +194,9 @@
         </div>
         <div class="body_container">
           Coordinate
-          <br />
-          x<b-form-input type="number" v-model="transition.xdes"></b-form-input>
-          y<b-form-input type="number" v-model="transition.ydes"></b-form-input>
+          <br />x
+          <b-form-input type="number" v-model="transition.xdes"></b-form-input>y
+          <b-form-input type="number" v-model="transition.ydes"></b-form-input>
           <br />
         </div>
         <br />
@@ -275,6 +275,144 @@ export default {
     },
     showTransition() {
       this.transition.visible = !this.transition.visible;
+    },
+    taskEarth() {
+      this.$http
+        .put(Config.link + "api/task/", {
+          effect_name: "earthquake",
+          cut: "",
+          image_properties: {
+            width: "",
+            height: "",
+            top: "",
+            left: "",
+            angle: "",
+            scaleX: "",
+            scaleY: "",
+            index: ""
+          },
+          parameters: {
+            power: this.earthquake.power,
+            speed: this.earthquake.speed,
+            time: this.earthquake.time
+          }
+        })
+        .then(response => {})
+        .catch(error => {});
+    },
+    taskFlash() {
+      this.$http
+        .put(Config.link + "api/task/", {
+          effect_name: "flash",
+          cut: "",
+          image_properties: {
+            width: "",
+            height: "",
+            top: "",
+            left: "",
+            angle: "",
+            scaleX: "",
+            scaleY: "",
+            index: ""
+          },
+          parameters: {
+            time: this.flash.time
+          }
+        })
+        .then(response => {})
+        .catch(error => {});
+    },
+    taskSpin() {
+      this.$http
+        .put(Config.link + "api/task/", {
+          effect_name: "spin",
+          cut: "",
+          image_properties: {
+            width: "",
+            height: "",
+            top: "",
+            left: "",
+            angle: "",
+            scaleX: "",
+            scaleY: "",
+            index: ""
+          },
+          parameters: {
+            degree: this.rotate.degree,
+            direction: this.rotate.direction,
+            speed: this.rotate.speed
+          }
+        })
+        .then(response => {})
+        .catch(error => {});
+    },
+    taskFullrotate() {
+      this.$http
+        .put(Config.link + "api/task/", {
+          effect_name: "fullrotate",
+          cut: "",
+          image_properties: {
+            width: "",
+            height: "",
+            top: "",
+            left: "",
+            angle: "",
+            scaleX: "",
+            scaleY: ""
+          },
+          parameters: {
+            direction: this.fullrotate.degree,
+            speed: this.fullrotate.speed
+          }
+        })
+        .then(response => {})
+        .catch(error => {});
+    },
+    taskShake() {
+      this.$http
+        .put(Config.link + "api/task/", {
+          effect_name: "shake",
+          cut: "",
+          image_properties: {
+            width: "",
+            height: "",
+            top: "",
+            left: "",
+            angle: "",
+            scaleX: "",
+            scaleY: ""
+          },
+          parameters: {
+            degree: this.shake.degree,
+            speed: this.shake.speed,
+            count: this.shake.count
+          }
+        })
+        .then(response => {})
+        .catch(error => {});
+    },
+    taskTransition() {
+      this.$http
+        .put(Config.link + "api/task/", {
+          effect_name: "transition",
+          cut: "",
+          image_properties: {
+            width: "",
+            height: "",
+            top: "",
+            left: "",
+            angle: "",
+            scaleX: "",
+            scaleY: ""
+          },
+          parameters: {
+            degree: this.Transition.degree,
+            speed: this.Transition.speed,
+            count: this.Transition.count
+          }
+        })
+        .then(response => {})
+        .catch(error => {});
     }
   }
 };
@@ -290,7 +428,7 @@ export default {
   right: 210px;
   bottom: 0;
   position: fixed;
-  height: 40px;
+  height: 20px;
   z-index: 100;
   background-color: #202020;
   overflow: hidden;

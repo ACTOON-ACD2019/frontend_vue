@@ -11,7 +11,7 @@
 <script>
 import "tui-color-picker/dist/tui-color-picker.css";
 import { ImageEditor } from "@toast-ui/vue-image-editor";
-
+import Config from "../../config/config"
 const icona = require("tui-image-editor/dist/svg/icon-a.svg");
 const iconb = require("tui-image-editor/dist/svg/icon-b.svg");
 const iconc = require("tui-image-editor/dist/svg/icon-c.svg");
@@ -64,6 +64,17 @@ export default {
       if (evt.target.className == "tui-image-editor-download-btn") {
         this.url = this.$refs.tuiImageEditor.invoke("toDataURL");
         var file = this.dataURLtoFile(this.url, "editimage");
+        console.log(this.url);
+        this.$http
+        .patch(this.src, {
+          upload_file: this.url,
+        })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+
+        });
         console.log(file);
         alert("이미지가 수정되었습니다.");
         this.$EventBus.$emit("imageEditorClose");

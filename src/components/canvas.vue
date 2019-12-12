@@ -27,25 +27,26 @@ export default {
   },
   mounted: function() {
     var canvas = new fabric.Canvas("cv1", {
-      //backgroundImage: require("@/assets/canvas_back.jpg"),
       width: this.width,
-      height: this.height
+      height: this.height,
+      preserveObjectStacking: true
     });
     canvas.selection = false;
     this.canvas = canvas;
     this.canvas.setBackgroundImage(
-      require("@/assets/canvas_back.jpg"),
+      require("@/assets/c_back1.jpg"),
       canvas.renderAll.bind(canvas),
       {
-        opacity: 0.5,
+        backgroundImageStretch: true,
+        opacity: 0.7,
         width: this.width,
         height: this.height
       }
     );
-    
+
     fabric.util.addListener(canvas.upperCanvasEl, "click", e => {
       let objType = canvas.findTarget(e).type;
-      if (objType == "image") {
+      if (objType != "") {
         this.$EventBus.$emit(
           "selectLayer",
           canvas.getObjects().indexOf(canvas.findTarget(e))
@@ -55,18 +56,44 @@ export default {
 
     fabric.util.addListener(canvas.upperCanvasEl, "dblclick", e => {
       let objType = canvas.findTarget(e).type;
-      if (objType == "image") {
+      if (objType != "") {
         this.$EventBus.$emit(
           "imageEditorOpen",
           canvas.findTarget(e)._element.src
         );
       }
     });
-
+    document.onkeydown = evt => {
+      evt = evt || window.event;
+      if (evt.keyCode === 46) {
+        var activeObject = canvas.getActiveObject();
+        if (activeObject) {
+          canvas.remove(activeObject);
+        }
+      }
+    };
     canvas.renderAll();
   },
   created() {
-    this.$EventBus.$on("resetCanvas", () => {});
+    this.$EventBus.$on("editCanvas", (width, height) => {
+      this.canvas.setWidth(width);
+      this.canvas.setHeight(height);
+      this.canvas.calcOffset();
+      this.canvas.setBackgroundImage(
+        require("@/assets/c_back1.jpg"),
+        this.canvas.renderAll.bind(this.canvas),
+        {
+          backgroundImageStretch: true,
+          opacity: 0.7,
+          width: width,
+          height: height
+        }
+      );
+      this.canvas.renderAll();
+    });
+    this.$EventBus.$on("resetCanvas", () => {
+      this.canvas.clear();
+    });
 
     this.$EventBus.$on("selectObject", index => {
       this.canvas.setActiveObject(this.canvas.item(index));
@@ -83,6 +110,11 @@ export default {
         oImg => {
           this.canvas.add(oImg);
           this.idx = this.canvas.getObjects().indexOf(oImg);
+          oImg.set({
+            type: obj.background.type,
+            sequence: obj.background.sequence,
+            idx: this.idx
+          });
           this.$EventBus.$emit("addLayer", obj.background, this.idx);
         }
       );
@@ -92,13 +124,43 @@ export default {
           oImg => {
             this.canvas.add(oImg);
             this.idx = this.canvas.getObjects().indexOf(oImg);
+            oImg.set({
+              type: obj.bubbles[String(i)].type,
+              sequence: obj.bubbles[String(i)].sequence,
+              sub_sequence: obj.bubbles[String(i)].sub_sequence,
+              idx: this.idx
+            });
             this.$EventBus.$emit("addLayer", obj.bubbles[String(i)], this.idx);
           }
         );
       }
     });
-  },
-  methods: {}
+
+    this.$EventBus.$on("zindexUp", idx => {
+      var canvasObjs = this.canvas.getObjects();
+      var canvasObj = canvasObjs[String(idx)];
+      this.canvas.bringToFront(canvasObj);
+      fabric.Canvas.prototype.orderObjects = function(compare) {
+        this._objects.sort(compare);
+        this.renderAll();
+      };
+    });
+
+    this.$EventBus.$on("zindexDown", idx => {
+      var canvasObjs = this.canvas.getObjects();
+      var canvasObj = canvasObjs[String(idx)];
+      this.canvas.sendToBack(canvasObj);
+      fabric.Canvas.prototype.orderObjects = function(compare) {
+        this._objects.sort(compare);
+        this.renderAll();
+      };
+    });
+
+    this.$EventBus.$on("saving", () => {
+      var canvasObjs = this.canvas.getObjects();
+      console.log(canvasObjs);
+    });
+  }
 };
 </script>
 

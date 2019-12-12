@@ -7,7 +7,7 @@
       {{ project }}
       <span style="font-size:10px;">{{ desc }}</span>
       <br />
-      {{ date }}
+      <span style="font-size:10px;">{{ date }}</span>
     </div>
   </div>
 </template>

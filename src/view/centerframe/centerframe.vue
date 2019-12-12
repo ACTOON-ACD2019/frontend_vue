@@ -8,21 +8,14 @@
             :key="index"
             @click="addCanvas(cut)"
             style="cursor: pointer"
-            draggable="true"
           >
-            <div v-if="index % 2 == 0">
-              왼쪽
+            <div class="cutLayout">
+              <div v-if="index % 2" class="sideblock"></div>
               <div class="image">
                 <img :src="cut.thumbnail.file" class="thumb-img" />
                 <br />
               </div>
-            </div>
-            <div v-else>
-              오른쪽
-              <div class="image">
-                <img :src="cut.thumbnail.file" class="thumb-img" />
-                <br />
-              </div>
+              <div v-if="!(index % 2)" class="sideblock"></div>
             </div>
           </div>
         </div>
@@ -82,33 +75,26 @@ export default {
       selected: "",
       tasks_size: 0,
       tasks: [
-        { value: "1", text: "1" },
-        { value: "1", text: "1" },
-        { value: "1", text: "1" },
-        { value: "1", text: "1" },
-        { value: "1", text: "1" },
-        { value: "1", text: "1" },
-        { value: "1", text: "1" },
-        { value: "1", text: "1" },
-        { value: "1", text: "1" },
-        { value: "1", text: "1" },
-        { value: "1", text: "1" },
-        { value: "1", text: "1" },
-        { value: "1", text: "1" },
-        { value: "1", text: "1" },
-        { value: "1", text: "1" }
+        { value: "1", text: "SC0 -> Earth" },
+        { value: "1", text: "BU0_1 -> Shake" },
+        { value: "1", text: "SC1 -> None" },
+        { value: "1", text: "BU1_1 -> None" },
+        { value: "1", text: "BU1_2 -> transition" },
+        { value: "1", text: "SC2 -> Flash" },
+        { value: "1", text: "BU2_1 -> Rotate" },
       ],
       deleteIdx: "",
       project: localStorage.getItem("project"),
       showcut: false,
       editor: 0,
-      cuts: []
+      cuts: [],
     };
   },
   created() {
+    
     this.$EventBus.$on("loadCut", () => {
-      this.$EventBus.$emit("refreshLayer");
-      this.$EventBus.$emit("refreshCanvas");
+      this.$EventBus.$emit("resetCanvas");
+      this.$EventBus.$emit("resetLayer");
       this.getCutList();
     });
     this.$EventBus.$on("showEditor", kind => {
@@ -190,13 +176,13 @@ export default {
     },
     addCanvas(obj) {
       this.$EventBus.$emit("addCanvasImage", obj);
-    },
+    }
   },
   components: { UserLayer, FabView, TuiEditor, ImageEditor }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .middle {
   position: relative;
   height: calc(100% - 80px);
@@ -210,14 +196,35 @@ export default {
   border-right-color: rgb(41, 41, 41);
 }
 
+.cutLayout > div {
+  display: inline-block;
+}
+
+.sideblock {
+  width: 30px;
+  height: 100px;
+}
+
 .thumb-img {
-  padding: 10px 10px 10px 10px;
-  width: 120px;
-  height: 120px;
+  margin: 20px 10px 10px 10px;
+  width: 100px;
+  height: 100px;
+}
+
+.toonframe {
+  position:relative;
+  left:10%;
+  right:10%;
+  top:-5%;
+  width:80%;
+  height:auto;
+  border: solid;
 }
 .middle_center {
   position: relative;
   width: calc(100% - 420px);
+  overflow-x:auto;
+  overflow-y:auto;
 }
 
 .middle_canvas {

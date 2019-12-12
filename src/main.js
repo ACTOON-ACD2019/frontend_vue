@@ -19,7 +19,7 @@ Vue.use(require('vue-moment'));
 
 Vue.prototype.$EventBus = new Vue();
 axios.defaults.headers.common['Authorization'] = localStorage.getItem('auth');
-axios.defaults.timeout = 5000;
+// axios.defaults.timeout = 10000;
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
